@@ -1,120 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Studio Intro</title>
-    <style>
-      body {
-        margin: 0;
-        background: black;
-        font-family: Arial, sans-serif;
-        color: white;
-        text-align: center;
-      }
+<head>
+  <meta charset="UTF-8">
+  <title>Studio Intro</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      font-family: Arial, sans-serif;
+      color: white;
+      text-align: center;
+    }
 
-      section {
-        height: 100vh;
-        width: 100vw;
-        position: fixed;
-        top: 0;
-        left: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-      }
+    section {
+      height: 100vh;
+      width: 100vw;
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
 
-      /* Intro video */
-      #intro {
-        background: black;
-        z-index: 2;
-      }
+    /* Intro video */
+    #intro {
+      background: black;
+      z-index: 2;
+    }
 
-      #intro video {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
+    #intro video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-      /* Loading bar */
-      #loading {
-        background: white;
-        color: black;
-        display: none;
-        z-index: 1;
-      }
+    /* Loading screen */
+    #loading {
+      background: black;
+      color: white;
+      display: none;
+      z-index: 3;
+      flex-direction: column;
+    }
 
-      .bar {
-        width: 80%;
-        height: 20px;
-        background: #ddd;
-        border-radius: 10px;
-        overflow: hidden;
-        margin-top: 20px;
-      }
+    .bar {
+      width: 80%;
+      height: 25px;
+      background: #333;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 20px;
+      display: flex;
+    }
 
-      .progress {
-        height: 100%;
-        width: 0%;
-        background: red; /* Starts red */
-        transition: width 0.2s, background 0.2s;
-      }
-    </style>
-  </head>
-  <body>
-    <!-- Intro video -->
-    <section id="intro">
-      <video id="introVideo" autoplay muted playsinline>
-        <source src="lv_0_20250831190250.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-    </section>
+    .progress-block {
+      flex: 1;
+      background: #555;
+      margin: 1px;
+      transition: background 0.3s;
+    }
+  </style>
+</head>
+<body>
+  <!-- Intro video -->
+  <section id="intro">
+    <video id="introVideo" autoplay muted playsinline>
+      <source src="lv_0_20250831190250.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </section>
 
-    <!-- Loading bar -->
-    <section id="loading">
-      <h2>Loading...</h2>
-      <div class="bar">
-        <div class="progress" id="progress"></div>
-      </div>
-    </section>
+  <!-- Loading bar -->
+  <section id="loading">
+    <h2>Loading...</h2>
+    <div class="bar" id="bar"></div>
+  </section>
 
-    <script>
-      const intro = document.getElementById("intro");
-      const video = document.getElementById("introVideo");
-      const loading = document.getElementById("loading");
-      const progress = document.getElementById("progress");
+  <script>
+    const intro = document.getElementById("intro");
+    const video = document.getElementById("introVideo");
+    const loading = document.getElementById("loading");
+    const bar = document.getElementById("bar");
 
-      // Show video first
-      video.addEventListener("canplaythrough", () => {
-        video.play().catch(() => {
-          showLoading();
-        });
-      });
+    // Create 10 solid blocks for the progress bar
+    const totalBlocks = 10;
+    const blocks = [];
+    for (let i = 0; i < totalBlocks; i++) {
+      const block = document.createElement("div");
+      block.classList.add("progress-block");
+      bar.appendChild(block);
+      blocks.push(block);
+    }
 
-      video.onended = () => {
-        intro.style.display = "none";
+    // Function to show loading bar
+    function showLoading() {
+      intro.style.display = "none";
+      loading.style.display = "flex";
+
+      let current = 0;
+      const colors = ["red", "yellow", "blue", "green"];
+
+      const interval = setInterval(() => {
+        if (current >= totalBlocks) {
+          clearInterval(interval);
+          goToLobby();
+          return;
+        }
+
+        // Color each block in sequence
+        blocks[current].style.background = colors[current % colors.length];
+        current++;
+      }, 400); // Each block fills every 400ms
+    }
+
+    function goToLobby() {
+      // Replace with your lobby URL or section logic
+      // For example, redirect to "lobby.html"
+      window.location.href = "lobby.html";
+    }
+
+    // Video events
+    video.addEventListener("canplaythrough", () => {
+      video.play().catch(() => {
         showLoading();
-      };
+      });
+    });
 
-      function showLoading() {
-        loading.style.display = "flex";
-
-        let width = 0;
-        const interval = setInterval(() => {
-          if (width >= 100) {
-            clearInterval(interval);
-          } else {
-            width += 2;
-            progress.style.width = width + "%";
-
-            // Change color at different stages
-            if (width < 25) progress.style.background = "red";
-            else if (width < 50) progress.style.background = "yellow";
-            else if (width < 75) progress.style.background = "blue";
-            else progress.style.background = "green";
-          }
-        }, 100);
-      }
-    </script>
-  </body>
+    video.onended = showLoading;
+  </script>
+</body>
 </html>
