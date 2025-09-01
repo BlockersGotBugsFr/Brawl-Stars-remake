@@ -6,30 +6,39 @@
     <style>
       body {
         margin: 0;
-        /* Initially set background to black as the video starts */
-        background: white;
+        background: black; /* Start with black background for the intro */
         font-family: Arial, sans-serif;
         color: white;
         text-align: center;
+        transition: background-color 1s ease-in-out, color 1s ease-in-out; /* Smooth transition for body background/color */
       }
 
       section {
-        /* Initially displayed as block by JS, hidden on video end */
-        display: none;
+        display: block; /* Start as block and hide with opacity later */
         height: 100vh;
-        /* Ensure the section covers the whole viewport */
         width: 100vw;
-        position: fixed; /* Fixes it to the viewport */
+        position: fixed;
         top: 0;
         left: 0;
-        z-index: 1000; /* Ensure it's on top of other content */
-        background: black; /* Background for the intro section */
+        z-index: 1000;
+        background: black;
+        opacity: 1; /* Initial opacity for the fade out */
+        transition: opacity 1s ease-in-out; /* Add transition for opacity */
+      }
+
+      section.fade-out {
+        opacity: 0; /* Target opacity for fading out */
       }
 
       #intro video {
         width: 100%;
         height: 100%;
         object-fit: cover;
+      }
+
+      #main-content {
+          display: none; /* Initially hidden */
+          padding-top: 50px; /* Add some padding so content isn't at the very top */
       }
     </style>
   </head>
@@ -41,8 +50,7 @@
       </video>
     </section>
 
-    <!-- Your main content will go here, visible after the video ends -->
-    <div id="main-content" style="display: none; padding-top: 50px;">
+    <div id="main-content">
         <h1>Welcome!</h1>
         <p>This is your main content, now visible on a white background.</p>
     </div>
@@ -50,40 +58,41 @@
     <script>
       const intro = document.getElementById("intro");
       const video = document.getElementById("introVideo");
-      const body = document.body; // Reference to the body element
-      const mainContent = document.getElementById("main-content"); // Reference to your main content
-
-      // Display the intro section when the page loads
-      intro.style.display = "block";
+      const body = document.body;
+      const mainContent = document.getElementById("main-content");
 
       // Attempt to play the video when it's ready to play through
       video.addEventListener('canplaythrough', () => {
         video.play().catch(error => {
           console.error("Autoplay prevented:", error);
-          // Fallback if autoplay is prevented (e.g., show main content immediately)
-          intro.style.display = "none";
-          body.style.background = "white";
-          body.style.color = "black"; // Change text color for white background
-          mainContent.style.display = "block";
+          // Fallback if autoplay is prevented
+          handleIntroEnd();
         });
-      }, { once: true }); // Ensure this event listener runs only once
+      }, { once: true });
 
       // When the video ends
       video.onended = () => {
-        intro.style.display = "none"; // Hide the intro section
-        body.style.background = "white"; // Change body background to white
-        body.style.color = "black"; // Change text color for better contrast on white
-        mainContent.style.display = "block"; // Show your main content
+        handleIntroEnd();
       };
 
       // Handle potential video loading errors
       video.addEventListener('error', (e) => {
         console.error("Video loading error:", e);
-        intro.style.display = "none"; // Hide intro on error
-        body.style.background = "white"; // Fallback to white background
-        body.style.color = "black";
-        mainContent.style.display = "block";
+        handleIntroEnd();
       });
+
+      function handleIntroEnd() {
+        // Add fade-out class to trigger the CSS transition
+        intro.classList.add('fade-out');
+
+        // After the fade-out transition completes, hide the element and change background
+        intro.addEventListener('transitionend', () => {
+          intro.style.display = 'none'; // Fully hide after fade
+          body.style.background = "white"; // Change body background
+          body.style.color = "black"; // Change text color for white background
+          mainContent.style.display = "block"; // Show main content
+        }, { once: true }); // Ensure this event listener runs only once per transition
+      }
     </script>
   </body>
 </html>
