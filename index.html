@@ -1,1 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+      body {
+        margin: 0;
+        background: black;
+        font-family: Arial, sans-serif;
+        color: white;
+        text-align: center;
+      }
 
+      section {
+        display: none;
+        height: 100vh;
+      }
+
+      #intro video {
+        width: 100%;
+        height: 100%;
+        object-fit: colover;
+      }
+    </style>
+  </head>
+  <body>
+    <section id="intro">
+      <video id="introVideo" autoplay>
+        <source src="" type="">
+      </video>
+    </section>
+
+    <script>
+    const intro = document.getElementById("intro");
+    const video = document.getElementById("introVideo");
+
+    intro.style.display = "block";
+
+    video.onended = () => {
+      intro.style.display = "none";
+  </script>
+  </body>
+</html>
+  
