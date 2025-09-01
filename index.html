@@ -20,26 +20,29 @@
       #intro video {
         width: 100%;
         height: 100%;
-        object-fit: colover;
+        object-fit: cover;
       }
     </style>
   </head>
   <body>
     <section id="intro">
-      <video id="introVideo" autoplay>
-        <source src="lv_0_20250831190250.mp4" type="">
+      <video id="introVideo" autoplay muted>
+        <source src="lv_0_20250831190250.mp4" type="video/mp4">
+        Your browser does not support the video tag.
       </video>
     </section>
 
     <script>
-    const intro = document.getElementById("intro");
-    const video = document.getElementById("introVideo");
+      const intro = document.getElementById("intro");
+      const video = document.getElementById("introVideo");
 
-    intro.style.display = "block";
+      intro.style.display = "block";
+      
+      video.load();
 
-    video.onended = () => {
-      intro.style.display = "none";
-  </script>
+      video.onended = () => {
+        intro.style.display = "none";
+      };
+    </script>
   </body>
 </html>
-  
