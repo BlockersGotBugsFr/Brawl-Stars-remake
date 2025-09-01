@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +6,6 @@
   <style>
     body {
       margin: 0;
-      background: black;
       font-family: Arial, sans-serif;
       color: white;
     }
@@ -38,28 +36,28 @@
 
     /* Loading screen */
     #loading {
-      background: #007BFF; /* solid blue */
-      color: white;
+      background: #007BFF; /* solid blue background */
       display: none;
       z-index: 3;
-      justify-content: flex-end; /* push bar to bottom */
-      align-items: center;
       flex-direction: column;
-      padding-bottom: 50px; /* distance from bottom */
+      justify-content: flex-end; /* push bar toward bottom */
+      align-items: center;
+      padding-bottom: 100px; /* bar higher above the bottom */
     }
 
     .bar-container {
       width: 80%;
       height: 20px;
-      background: #0056b3;
+      background: #007BFF; /* same as background */
       border-radius: 10px;
       overflow: hidden;
+      box-shadow: 0 0 5px rgba(0,0,0,0.3); /* optional subtle shadow for visibility */
     }
 
     .progress {
       height: 100%;
       width: 0%;
-      background: #00ffff; /* bright cyan progress */
+      background: #00BFFF; /* slightly lighter for visibility */
       transition: width 0.3s;
     }
   </style>
@@ -104,14 +102,14 @@
           clearInterval(interval);
           goToLobby();
         } else {
-          width += 2; // progress speed
+          width += 2; // adjust speed if needed
           progress.style.width = width + "%";
         }
       }, 100);
     }
 
     function goToLobby() {
-      window.location.href = "lobby.html"; // make sure this file exists!
+      window.location.href = "lobby.html"; // make sure this file exists
     }
   </script>
 </body>
