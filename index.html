@@ -6,15 +6,24 @@
     <style>
       body {
         margin: 0;
-        background: white;
+        /* Initially set background to black as the video starts */
+        background: black;
         font-family: Arial, sans-serif;
         color: white;
         text-align: center;
       }
 
       section {
+        /* Initially displayed as block by JS, hidden on video end */
         display: none;
         height: 100vh;
+        /* Ensure the section covers the whole viewport */
+        width: 100vw;
+        position: fixed; /* Fixes it to the viewport */
+        top: 0;
+        left: 0;
+        z-index: 1000; /* Ensure it's on top of other content */
+        background: black; /* Background for the intro section */
       }
 
       #intro video {
@@ -32,25 +41,48 @@
       </video>
     </section>
 
+    <!-- Your main content will go here, visible after the video ends -->
+    <div id="main-content" style="display: none; padding-top: 50px;">
+        <h1>Welcome!</h1>
+        <p>This is your main content, now visible on a white background.</p>
+    </div>
+
     <script>
       const intro = document.getElementById("intro");
       const video = document.getElementById("introVideo");
+      const body = document.body; // Reference to the body element
+      const mainContent = document.getElementById("main-content"); // Reference to your main content
 
+      // Display the intro section when the page loads
       intro.style.display = "block";
-      
+
+      // Attempt to play the video when it's ready to play through
       video.addEventListener('canplaythrough', () => {
         video.play().catch(error => {
           console.error("Autoplay prevented:", error);
+          // Fallback if autoplay is prevented (e.g., show main content immediately)
+          intro.style.display = "none";
+          body.style.background = "white";
+          body.style.color = "black"; // Change text color for white background
+          mainContent.style.display = "block";
         });
-      }, { once: true });
+      }, { once: true }); // Ensure this event listener runs only once
 
+      // When the video ends
       video.onended = () => {
-        intro.style.display = "none";
+        intro.style.display = "none"; // Hide the intro section
+        body.style.background = "white"; // Change body background to white
+        body.style.color = "black"; // Change text color for better contrast on white
+        mainContent.style.display = "block"; // Show your main content
       };
 
+      // Handle potential video loading errors
       video.addEventListener('error', (e) => {
         console.error("Video loading error:", e);
-        intro.style.display = "none";
+        intro.style.display = "none"; // Hide intro on error
+        body.style.background = "white"; // Fallback to white background
+        body.style.color = "black";
+        mainContent.style.display = "block";
       });
     </script>
   </body>
