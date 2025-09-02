@@ -46,8 +46,8 @@
       background-repeat: no-repeat;
       background-size: cover;
       background-position: center;
-      z-index: 99; /* Higher than intro, but lower initially so intro is visible */
-      display: none; /* Initially hidden */
+      z-index: 99; /* Positioned behind the video */
+      display: flex; /* Displayed but transparent initially */
       opacity: 0; /* Starts transparent for a fade-in effect */
     }
 
@@ -111,17 +111,14 @@
       }
 
       function showLoading() {
-        // Hide the intro video section by fading it out
+        // Fade out the intro video by changing its opacity to 0
         intro.style.opacity = '0';
-        // After the fade, remove it from the layout
+        // Fade in the loading screen by changing its opacity to 1
+        loading.style.opacity = '1';
+
+        // After the fade, start the loading bar and remove the intro element
         setTimeout(() => {
           intro.style.display = 'none';
-
-          // Now show the loading screen by fading it in
-          loading.style.display = 'flex';
-          setTimeout(() => {
-            loading.style.opacity = '1';
-          }, 50); // Small delay to ensure display:flex is applied first
 
           let width = 0;
           const interval = setInterval(() => {
