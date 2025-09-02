@@ -24,7 +24,7 @@
             transition: opacity 0.5s ease;
         }
         #lobby {
-            background-image: url('brawl star bg.jpeg');
+            background: gray;
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
@@ -33,13 +33,13 @@
         }
         #playButton {
             position: absolute;
-            top: 40px;
-            right: 40px; /* Positioned in the top right corner */
+            bottom: 40px;
+            right: 40px; 
             padding: 15px 30px;
             font-size: 1.5em;
             font-weight: bold;
             color: white;
-            background-color: #00BFFF; /* Blue, like the loading bar */
+            background-color: #00BFFF; 
             border: none;
             border-radius: 10px;
             cursor: pointer;
@@ -47,7 +47,7 @@
             transition: background-color 0.3s ease;
         }
         #playButton:hover {
-            background-color: #0095c9; /* Darker blue on hover */
+            background-color: #0095c9; 
         }
     </style>
 </head>
@@ -61,7 +61,7 @@
             const playButton = document.getElementById("playButton");
 
             playButton.addEventListener('click', () => {
-                window.location.href = "game.html"; // Redirect to game.html
+                window.location.href = "Game.html"; 
             });
         });
     </script>
