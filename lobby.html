@@ -24,66 +24,44 @@
             transition: opacity 0.5s ease;
         }
         #lobby {
-            background: gray;
+            background-image: url('brawl star bg.jpeg');
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
             z-index: 100;
             opacity: 1;
         }
-        #game-section {
-            background: #1a1a1a;
-            z-index: -1;
-            opacity: 0;
-        }
-        #game-section .game-content {
-            text-align: center;
-            font-size: 2em;
-            padding: 20px;
-        }
-        #startButton {
+        #playButton {
+            position: absolute;
+            bottom: 40px;
+            left: 40px; /* Positioned in the bottom left corner */
             padding: 15px 30px;
             font-size: 1.5em;
             font-weight: bold;
             color: white;
-            background-color: #00BFFF;
+            background-color: #ff3e3e;
             border: none;
             border-radius: 10px;
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
             transition: background-color 0.3s ease;
         }
-        #startButton:hover {
-            background-color: #0095c9;
+        #playButton:hover {
+            background-color: #ff6c6c;
         }
     </style>
 </head>
 <body>
-    <!-- Lobby Section -->
     <section id="lobby">
         <h1>Welcome to the Lobby!</h1>
-        <button id="startButton">Start Game</button>
+        <button id="playButton">Play Game</button>
     </section>
-
-    <!-- Game Section -->
-    <section id="game-section">
-        <div class="game-content">
-            <h1>Game is starting...</h1>
-            <p>Your game content goes here.</p>
-        </div>
-    </section>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const lobby = document.getElementById("lobby");
-            const startButton = document.getElementById("startButton");
-            const gameSection = document.getElementById("game-section");
+            const playButton = document.getElementById("playButton");
 
-            startButton.addEventListener('click', () => {
-                lobby.style.opacity = '0';
-                lobby.style.zIndex = '99';
-                gameSection.style.opacity = '1';
-                gameSection.style.zIndex = '100';
+            playButton.addEventListener('click', () => {
+                window.location.href = "game.html"; // Redirect to game.html
             });
         });
     </script>
