@@ -1,6 +1,6 @@
 # 🎮 [GAME NAME]
 
-![Game Header Image or Logo](images/header.png)
+![Game Header Image or Logo](StudiosImage.png)
 
 ## ✨ About the Game
 
