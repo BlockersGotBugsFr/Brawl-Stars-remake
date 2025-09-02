@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Studio Intro</title>
+  <title>Loading</title>
   <style>
     body {
       margin: 0;
@@ -67,7 +67,6 @@
   <section id="intro">
     <video id="introVideo" autoplay muted playsinline>
       <source src="lv_0_20250831190250.mp4" type="video/mp4">
-      Your browser does not support the video tag.
     </video>
   </section>
   <section id="loading">
@@ -88,7 +87,7 @@
         playPromise.then(() => {
           video.onended = showLoading;
         }).catch(() => {
-          console.log('Autoplay was prevented. Showing loading screen instead.');
+          console.log('Broken Loading Screen ');
           showLoading();
         });
       }
@@ -102,7 +101,7 @@
           const interval = setInterval(() => {
             if (width >= 100) {
               clearInterval(interval);
-              window.location.href = "lobby.html"; // Redirect to lobby
+              window.location.href = "lobby.html";
             } else {
               width += 2;
               progress.style.width = width + "%";
