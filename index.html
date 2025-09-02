@@ -36,22 +36,22 @@
 
     /* Loading screen */
     #loading {
-      background: #007BFF; /* solid blue background */
+      background: #007BFF;
       display: none;
       z-index: 3;
       flex-direction: column;
-      justify-content: flex-end; /* push bar toward bottom */
+      justify-content: center; /* Vertically centers the content */
       align-items: center;
-      padding-bottom: 80px; /* bar higher above the bottom */
     }
 
     .bar-container {
       width: 80%;
       height: 20px;
-      background: black; /* same as background */
+      background: black;
       border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 0 5px rgba(0,0,0,0.3); /* optional subtle shadow for visibility */
+      box-shadow: 0 0 5px rgba(0,0,0,0.3);
+      margin-top: 150px; /* Adjust this value to move the bar up or down */
     }
 
     .progress {
