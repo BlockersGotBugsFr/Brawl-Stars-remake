@@ -54,7 +54,7 @@ Want to help make this game even better? We'd love your input! Feel free to:
 
 ## 📝 License
 
-This project is licensed under the [LICENSE NAME] - see the `LICENSE.md` file for details.
+This project is licensed under the [MIT License] - see the `LICENSE.md` file for details.
 
 ## 🙏 Acknowledgments
 
