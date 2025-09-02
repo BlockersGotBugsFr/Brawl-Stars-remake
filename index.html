@@ -36,11 +36,13 @@
 
     /* Loading screen */
    #loading {
-    /* Correct background image usage */
     background-image: url('brawl star bg.jpeg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center; /* This helps center the image within the container */
+  display: none;
+  z-index: 3;
+  position: relative;
 
     /* Make it a full-page overlay that doesn't scroll with the page */
     position: fixed;
