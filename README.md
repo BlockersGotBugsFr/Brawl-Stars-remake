@@ -1,6 +1,6 @@
 # 🎮 [GAME NAME]
 
-![Game Header Image or Logo](StudiosImage.png)
+<img src="StudiosImage.png" alt="Game Header Image or Logo" width="500">
 
 ## ✨ About the Game
 
@@ -12,7 +12,7 @@
 
 [Provide a simple, quick guide on how to get started. Assume the user has no prior knowledge of your game.]
 
-1.  **Access the game**: Open `index.html` in your web browser. 
+1.  **Access the game**: Open `index.html` in your web browser.
 2.  **Start the video**: If the intro video does not play automatically due to browser restrictions, simply click the screen.
 3.  **Controls**:
     *   `[KEY]` - [Action]
@@ -61,4 +61,4 @@ This project is licensed under the [MIT License] - see the `LICENSE` file for de
 
 [This is a great place to thank anyone who helped you or inspired your project.]
 
-*   Inspiration for this project came from [https://supercell.com].
+*   Inspiration for this project came from supercell.com.
