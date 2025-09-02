@@ -39,9 +39,7 @@
       background: #007BFF;
       display: none;
       z-index: 3;
-      flex-direction: column;
-      justify-content: center; /* Vertically centers the content */
-      align-items: center;
+      position: relative; /* Set a relative position for the child to be absolutely positioned against */
     }
 
     .bar-container {
@@ -51,7 +49,10 @@
       border-radius: 10px;
       overflow: hidden;
       box-shadow: 0 0 5px rgba(0,0,0,0.3);
-      margin-top: 125px; /* Adjust this value to move the bar up or down */
+      position: absolute; /* Position the bar independent of the normal flow */
+      left: 50%; /* Center the bar horizontally */
+      transform: translateX(-50%); /* Adjust for horizontal centering */
+      bottom: 80px; /* Adjust this value to move the bar up or down from the bottom */
     }
 
     .progress {
