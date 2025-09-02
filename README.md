@@ -41,8 +41,9 @@ _Showcasing another cool feature or level._
 
 [Credit yourself and any other team members. Link to your GitHub profiles or portfolios.]
 
-*   **[YOUR NAME]** - [Your Role] - [GitHub Profile](https://github.com/[your-github-handle])
-*   **[TEAM MEMBER NAME]** - [Their Role] - [GitHub Profile](https://github.com/[their-github-handle])
+*   **[CiphAnon Studios]** - [Studio Group] - [GitHub Profile](https://github.com/[your-github-handle])
+*   **[ToonyTime]** - [Owner] - [GitHub Profile](https://github.com/[their-github-handle])
+*   *   **[BlockersGotBugsFr.Alt]** - [Alt Account used at school] - [GitHub Profile](https://github.com/[their-github-handle])
 
 ## 🤝 Contributing
 
@@ -54,7 +55,7 @@ Want to help make this game even better? We'd love your input! Feel free to:
 
 ## 📝 License
 
-This project is licensed under the [MIT License] - see the `LICENSE.md` file for details.
+This project is licensed under the [MIT License] - see the `LICENSE` file for details.
 
 ## 🙏 Acknowledgments
 
