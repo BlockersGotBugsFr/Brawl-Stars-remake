@@ -23,10 +23,10 @@
 
 [A picture is worth a thousand words! Use this section to showcase your game with screenshots or a GIF. This is one of the most effective ways to communicate what your game is about.]
 
-![Gameplay Screenshot 1](<img src="StudiosImage.png" alt="Game Header Image or Logo" width="200">)
+![Gameplay Screenshot 1]<img src="StudiosImage.png" alt="Game Header Image or Logo" width="200">
 _A captivating moment from the game._
 
-![Gameplay Screenshot 2](<img src="StudiosImage.png" alt="Game Header Image or Logo" width="200">)
+![Gameplay Screenshot 2]<img src="StudiosImage.png" alt="Game Header Image or Logo" width="200">
 _Showcasing another cool feature or level._
 
 ## 🛠️ Technologies Used
