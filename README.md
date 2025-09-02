@@ -1,6 +1,6 @@
 # 🎮 [GAME NAME]
 
-<img src="StudiosImage.png" alt="Game Header Image or Logo" width="50">
+<img src="StudiosImage.png" alt="Game Header Image or Logo" width="200">
 
 ## ✨ About the Game
 
