@@ -54,33 +54,12 @@
       box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
       position: absolute;
       bottom: 40px;
-      opacity: 1;
-      transition: opacity 0.5s ease;
     }
     .progress {
       height: 100%;
       width: 0%;
       background: #00BFFF;
       transition: width 0.3s;
-    }
-    #playButton {
-      position: absolute;
-      bottom: 120px;
-      padding: 15px 30px;
-      font-size: 1.2em;
-      font-weight: bold;
-      color: white;
-      background-color: #ff3e3e;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.5s ease;
-    }
-    #playButton:hover {
-      background-color: #ff6c6c;
     }
   </style>
 </head>
@@ -95,7 +74,6 @@
     <div class="bar-container">
       <div class="progress" id="progress"></div>
     </div>
-    <button id="playButton">Play Game</button>
   </section>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -103,8 +81,7 @@
       const video = document.getElementById("introVideo");
       const loading = document.getElementById("loading");
       const progress = document.getElementById("progress");
-      const playButton = document.getElementById("playButton");
-      const barContainer = document.querySelector(".bar-container");
+
       const playPromise = video.play();
 
       if (playPromise !== undefined) {
@@ -115,6 +92,7 @@
           showLoading();
         });
       }
+
       function showLoading() {
         intro.style.opacity = '0';
         loading.style.opacity = '1';
@@ -124,22 +102,13 @@
           const interval = setInterval(() => {
             if (width >= 100) {
               clearInterval(interval);
-              showPlayButton();
+              window.location.href = "lobby.html"; // Redirect to lobby
             } else {
               width += 2;
               progress.style.width = width + "%";
             }
           }, 100);
         }, 500);
-      }
-      function showPlayButton() {
-        barContainer.style.opacity = '0';
-        playButton.style.opacity = '1';
-        playButton.style.pointerEvents = 'auto';
-        playButton.addEventListener('click', goToLobby);
-      }
-      function goToLobby() {
-        window.location.href = "lobby.html";
       }
     });
   </script>
