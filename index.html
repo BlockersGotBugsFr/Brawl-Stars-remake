@@ -2,14 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Studio Intro</title>
   <style>
+    /* General styling */
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       color: white;
+      overflow: hidden; /* Prevents scrollbars during transitions */
     }
 
+    /* Base styles for intro and loading sections */
     section {
       height: 100vh;
       width: 100vw;
@@ -20,50 +24,57 @@
       justify-content: center;
       align-items: center;
       flex-direction: column;
+      transition: opacity 0.5s ease; /* For smooth fading */
     }
 
     /* Intro video */
     #intro {
       background: black;
-      z-index: 2;
+      z-index: 100; /* Ensure the video is on top initially */
+      opacity: 1; /* Initially visible */
     }
 
     #intro video {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: cover; /* Ensures the video covers the entire container */
     }
 
     /* Loading screen */
     #loading {
-      background: #007BFF; /* solid blue background */
-      display: none;
-      z-index: 3;
-      flex-direction: column;
-      justify-content: flex-end; /* push bar toward bottom */
-      align-items: center;
-      padding-bottom: 80px; /* bar higher above the bottom */
+      background-image: url('brawl star bg.jpeg');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      z-index: 99; /* Higher than intro, but lower initially so intro is visible */
+      display: none; /* Initially hidden */
+      opacity: 0; /* Starts transparent for a fade-in effect */
     }
 
+    /* Loading bar */
     .bar-container {
       width: 80%;
+      max-width: 500px;
       height: 20px;
-      background: black; /* same as background */
+      background: rgba(0, 0, 0, 0.5);
       border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 0 5px rgba(0,0,0,0.3); /* optional subtle shadow for visibility */
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+      position: absolute;
+      bottom: 80px;
     }
 
     .progress {
       height: 100%;
       width: 0%;
-      background: #00BFFF; /* slightly lighter for visibility */
+      background: #00BFFF;
       transition: width 0.3s;
     }
   </style>
 </head>
 <body>
-  <!-- Intro video -->
+
+  <!-- Intro video section -->
   <section id="intro">
     <video id="introVideo" autoplay muted playsinline>
       <source src="lv_0_20250831190250.mp4" type="video/mp4">
@@ -79,38 +90,56 @@
   </section>
 
   <script>
-    const intro = document.getElementById("intro");
-    const video = document.getElementById("introVideo");
-    const loading = document.getElementById("loading");
-    const progress = document.getElementById("progress");
+    document.addEventListener('DOMContentLoaded', () => {
+      const intro = document.getElementById("intro");
+      const video = document.getElementById("introVideo");
+      const loading = document.getElementById("loading");
+      const progress = document.getElementById("progress");
 
-    // Video events
-    video.addEventListener("canplaythrough", () => {
-      video.play().catch(() => showLoading());
+      // Attempt to play the video. Browsers might block autoplay.
+      const playPromise = video.play();
+
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          // Autoplay started successfully. Set up the video end listener.
+          video.onended = showLoading;
+        }).catch(() => {
+          // Autoplay was prevented. Fall back to showing the loading screen immediately.
+          console.log('Autoplay was prevented. Showing loading screen instead.');
+          showLoading();
+        });
+      }
+
+      function showLoading() {
+        // Hide the intro video section by fading it out
+        intro.style.opacity = '0';
+        // After the fade, remove it from the layout
+        setTimeout(() => {
+          intro.style.display = 'none';
+
+          // Now show the loading screen by fading it in
+          loading.style.display = 'flex';
+          setTimeout(() => {
+            loading.style.opacity = '1';
+          }, 50); // Small delay to ensure display:flex is applied first
+
+          let width = 0;
+          const interval = setInterval(() => {
+            if (width >= 100) {
+              clearInterval(interval);
+              goToLobby();
+            } else {
+              width += 2; // Adjust speed as needed
+              progress.style.width = width + "%";
+            }
+          }, 100);
+        }, 500); // Match this timeout with the CSS transition duration
+      }
+
+      function goToLobby() {
+        window.location.href = "lobby.html";
+      }
     });
-
-    video.onended = showLoading;
-
-    // Show loading screen
-    function showLoading() {
-      intro.style.display = "none";
-      loading.style.display = "flex";
-
-      let width = 0;
-      const interval = setInterval(() => {
-        if (width >= 100) {
-          clearInterval(interval);
-          goToLobby();
-        } else {
-          width += 2; // adjust speed if needed
-          progress.style.width = width + "%";
-        }
-      }, 100);
-    }
-
-    function goToLobby() {
-      window.location.href = "lobby.html"; // make sure this file exists
-    }
   </script>
 </body>
 </html>
