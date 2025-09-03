@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lobby</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Game Lobby</title>
     <style>
         body {
             margin: 0;
-            font-family: 'Roboto', sans-serif; /* Changed default font */
+            font-family: Arial, sans-serif;
             color: white;
             overflow: hidden;
             background-color: #1a1a2e; /* Darker background for depth */
@@ -32,7 +31,6 @@
             background-position: center;
             z-index: 100;
             opacity: 1;
-            /* Added a subtle overlay for better text readability and depth */
             position: relative;
         }
         #lobby::before {
@@ -45,45 +43,102 @@
             background: rgba(0, 0, 0, 0.4); /* Dark overlay */
             z-index: -1;
         }
-        h1 {
-            font-family: 'Orbitron', sans-serif; /* Distinct gaming-style font */
-            font-size: 3.5em; /* Larger, more impactful title */
-            text-shadow: 0 0 15px rgba(0, 191, 255, 0.7); /* Glow effect */
-            margin-bottom: 50px; /* Space above button */
+
+        /* UI Placeholder Elements - mimicking your mockup shapes */
+
+        /* Top-left long rounded rectangle */
+        .top-left-long-box {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            width: 250px;
+            height: 60px;
+            background-color: rgba(100, 100, 100, 0.7); /* Greyish, slightly transparent */
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
+
+        /* Top-left small rounded square */
+        .top-left-small-box {
+            position: absolute;
+            top: 40px;
+            left: 310px; /* Position next to the long box */
+            width: 60px;
+            height: 60px;
+            background-color: rgba(100, 100, 100, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Top-right small rounded square */
+        .top-right-small-box {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(100, 100, 100, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Central large oval */
+        .central-oval {
+            width: 600px; /* Adjust size as needed */
+            height: 300px;
+            background-color: rgba(100, 100, 100, 0.5); /* More transparent for central feature */
+            border-radius: 50%; /* Makes it an oval/circle */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            margin-bottom: 50px; /* Space above bottom section */
+        }
+
+        /* Bottom "Play Button" area - styled as a rounded rectangle */
         #playButton {
             position: absolute;
-            bottom: 40px; /* Increased distance from bottom */
-            right: 50px; /* Increased distance from right */
-            height: 120px; /* Slightly larger button */
-            width: 280px; /* Slightly wider button */
-            padding: 15px 30px;
-            font-size: 1.8em; /* Larger text on button */
-            font-weight: bold;
-            color: white;
-            background-color: #00BFFF;
+            bottom: 40px;
+            right: 50px;
+            height: 120px;
+            width: 280px;
+            background-color: #00BFFF; /* A vibrant blue for a clear call to action */
             border: none;
-            border-radius: 20px; /* More pronounced rounded corners */
+            border-radius: 20px;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6); /* Stronger shadow */
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; /* Added transform for hover effect */
-            letter-spacing: 1px; /* Slightly increased letter spacing */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            /* No text inside, so align a potential icon if added later */
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         #playButton:hover {
             background-color: #0095c9;
-            transform: translateY(-5px); /* Button lifts slightly on hover */
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.7); /* Stronger shadow on hover */
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.7);
         }
         #playButton:active {
-            transform: translateY(-2px); /* Button presses down slightly on click */
+            transform: translateY(-2px);
             box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Placeholder for a play icon within the button if desired */
+        #playButton::after {
+            content: '▶'; /* Unicode play triangle */
+            font-size: 3em;
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
     </style>
 </head>
 <body>
     <section id="lobby">
-        <h1>Welcome to the Lobby!</h1>
-        <button id="playButton">Play Game</button>
+        <!-- UI Placeholder Elements -->
+        <div class="top-left-long-box"></div>
+        <div class="top-left-small-box"></div>
+        <div class="top-right-small-box"></div>
+        <div class="central-oval"></div>
+
+        <!-- Play Button Area -->
+        <button id="playButton"></button>
     </section>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
