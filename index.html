@@ -38,40 +38,99 @@
       background-repeat: no-repeat;
       background-size: cover;
       background-position: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       z-index: 99;
       display: flex;
       flex-direction: column;
+      justify-content: flex-end;
       align-items: center;
       opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+      background-color: rgba(0, 0, 0, 0.5);
     }
-    .bar-container {
+    
+    .loading-content {
       width: 90%;
       max-width: 500px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .loading-text {
+      color: white;
+      font-family: 'Arial', sans-serif;
+      font-weight: bold;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+      animation: pulsate 1.5s infinite; 
+    }
+    
+    @keyframes pulsate {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .bar-container {
+      width: 100%;
       height: 35px;
       background: rgba(0, 0, 0, 0.5);
       border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-      position: absolute;
-      bottom: 40px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      border: 2px solid #555;
     }
+    
     .progress {
       height: 100%;
       width: 0%;
-      background: #00BFFF;
-      transition: width 0.3s;
+      background: #00BFFF; 
+      background: linear-gradient(90deg, #00BFFF, #2087e5); 
+      transition: width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+      position: relative;
+    }
+    
+    .progress::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateX(-100%);
+      animation: shine 2s infinite;
+    }
+
+    @keyframes shine {
+      to {
+        transform: translateX(100%);
+      }
+    }
+    
+    #intro {
+      transition: opacity 0.5s ease-in-out;
     }
   </style>
 </head>
 <body>
-  <section id="intro">
+    <section id="intro">
     <video id="introVideo" autoplay muted playsinline>
       <source src="lv_0_20250831190250.mp4" type="video/mp4">
     </video>
   </section>
+
   <section id="loading">
-    <div class="bar-container">
-      <div class="progress" id="progress"></div>
+    <div class="loading-content">
+      <div class="loading-text">Loading...</div>
+      <div class="bar-container">
+        <div class="progress" id="progress"></div>
+      </div>
     </div>
   </section>
   <script>
@@ -97,17 +156,48 @@
         loading.style.opacity = '1';
         setTimeout(() => {
           intro.style.display = 'none';
-          let width = 0;
-          const interval = setInterval(() => {
-            if (width >= 100) {
-              clearInterval(interval);
-              window.location.href = "lobby.html";
-            } else {
-              width += 2;
-              progress.style.width = width + "%";
-            }
-          }, 100);
+          randomizedLoading(progress);
         }, 500);
+      }
+      
+      // New function for randomized loading
+      function randomizedLoading(progressElement) {
+        let width = 0;
+        const totalDuration = 10000; // Total loading time in milliseconds
+        let startTime = Date.now();
+
+        function updateProgress() {
+          const elapsedTime = Date.now() - startTime;
+          
+          if (elapsedTime >= totalDuration) {
+            progressElement.style.width = "100%";
+            setTimeout(() => {
+              window.location.href = "lobby.html";
+            }, 500);
+            return;
+          }
+
+          let targetWidth = (elapsedTime / totalDuration) * 98;
+          
+          // Introduce random "slowdowns" and "stops"
+          const randomFactor = Math.random();
+          if (randomFactor > 0.8) {
+            targetWidth = width;
+          } else if (randomFactor > 0.6) {
+            targetWidth = width + (Math.random() * 0.5);
+          } else {
+            targetWidth = width + (Math.random() * 1.5);
+          }
+          
+          if (width < targetWidth) {
+            width = Math.min(width + 0.5, targetWidth);
+            progressElement.style.width = width + "%";
+          }
+          
+          requestAnimationFrame(updateProgress);
+        }
+        
+        requestAnimationFrame(updateProgress);
       }
     });
   </script>
