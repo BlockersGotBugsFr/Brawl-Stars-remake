@@ -5,18 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Lobby</title>
     <style>
-        /* CSS variables for consistent theming */
+        /* Base styles and variables */
         :root {
             --ui-bg-color: rgba(60, 60, 80, 0.7);
             --ui-bg-color-solid: #3c3c50;
             --button-color: #00BFFF;
             --button-hover-color: #0095c9;
             --accent-color: #FFD700;
-            --shadow-light: rgba(255, 255, 255, 0.1);
             --shadow-dark: rgba(0, 0, 0, 0.6);
             --ui-border-radius: 15px;
-            --ui-button-height: 60px;
-            --ui-profile-size: 80px;
+            --font-size-base: clamp(14px, 1.5vw, 20px);
         }
 
         body {
@@ -25,30 +23,20 @@
             color: white;
             overflow: hidden;
             background-color: #1a1a2e;
-            /* Adaptive font size for responsive scaling */
-            font-size: clamp(12px, 1.2vw, 18px);
+            font-size: var(--font-size-base);
         }
 
+        /* Full-screen container with layers */
         #lobby {
             height: 100vh;
             width: 100vw;
-            position: fixed;
-            top: 0;
-            left: 0;
+            position: relative;
             background-image: url('GameLobbyBg.png');
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
-            z-index: 1;
-            display: grid;
-            grid-template-areas: 
-                "profile-area character-display settings-area"
-                "bottom-nav character-display play-button-area";
-            grid-template-rows: 1fr 20vh;
-            grid-template-columns: 20% 1fr 20%;
-            padding: 20px;
-            gap: 20px; /* Space between grid items */
         }
+        
         #lobby::before {
             content: '';
             position: absolute;
@@ -57,19 +45,32 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.4);
-            z-index: -1;
+            backdrop-filter: blur(2px);
+            z-index: 1;
         }
 
-        /* Top-left profile and resource area */
-        .profile-area {
-            grid-area: profile-area;
+        /* Header UI layer */
+        .header-ui {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        /* Profile and resources group */
+        .profile-group {
             display: flex;
             align-items: center;
-            align-self: start;
+            pointer-events: auto;
         }
         .profile-button {
-            width: var(--ui-profile-size);
-            height: var(--ui-profile-size);
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             background-color: var(--ui-bg-color);
             background-image: url('profile-icon.png');
@@ -80,8 +81,6 @@
             box-shadow: 0 4px 8px var(--shadow-dark);
             cursor: pointer;
             transition: transform 0.2s ease, border-color 0.2s ease;
-            position: relative;
-            z-index: 2;
         }
         .profile-button:hover {
             transform: scale(1.05);
@@ -94,28 +93,22 @@
             background-color: var(--ui-bg-color);
             border-radius: 25px;
             box-shadow: 0 4px 8px var(--shadow-dark);
-            margin-left: calc(var(--ui-profile-size) * -0.25);
+            margin-left: -20px;
             height: 50px;
             min-width: 200px;
             position: relative;
-            z-index: 1;
+            z-index: -1;
         }
         .resource-box p {
-            margin-left: calc(var(--ui-profile-size) * 0.25);
+            margin-left: 25px;
             font-size: 1em;
             font-weight: bold;
         }
 
-        /* Top-right settings button */
-        .settings-area {
-            grid-area: settings-area;
-            display: flex;
-            justify-content: flex-end;
-            align-self: start;
-        }
+        /* Settings button */
         .settings-button {
-            width: var(--ui-button-height);
-            height: var(--ui-button-height);
+            width: 60px;
+            height: 60px;
             border-radius: var(--ui-border-radius);
             background-color: var(--ui-bg-color);
             background-image: url('settings-icon.png');
@@ -126,35 +119,36 @@
             box-shadow: 0 4px 8px var(--shadow-dark);
             cursor: pointer;
             transition: transform 0.2s ease, background-color 0.2s ease;
+            pointer-events: auto;
         }
         .settings-button:hover {
             transform: scale(1.05);
             background-color: rgba(80, 80, 100, 0.7);
         }
 
-        /* Central character display area */
+        /* Main content layer for character display */
         .character-display {
-            grid-area: character-display;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding-top: 5vh;
+            align-items: flex-end;
+            z-index: 2;
+            pointer-events: none;
         }
         .character-model-container {
-            width: 80%; /* Takes up majority of central space */
-            height: 80%;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 20px;
-            box-shadow: 0 8px 16px var(--shadow-dark);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            /* Placeholder for a character image */
+            width: 60%;
+            max-width: 1000px;
+            margin-bottom: 20vh;
+            text-align: center;
+            pointer-events: auto;
         }
         .character-model-container img {
-            max-width: 90%;
-            max-height: 90%;
+            width: 100%;
+            height: auto;
             object-fit: contain;
             animation: float-character 4s ease-in-out infinite;
         }
@@ -164,40 +158,15 @@
             100% { transform: translateY(0px); }
         }
 
-        /* Bottom navigation menu */
-        .bottom-nav {
-            grid-area: bottom-nav;
-            align-self: end;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            background: var(--ui-bg-color);
-            border-radius: 30px;
-            box-shadow: 0 -4px 10px var(--shadow-dark);
-            height: 80%;
-            padding: 0 20px;
+        /* Play Button layer */
+        .play-button-layer {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            z-index: 3;
+            pointer-events: none;
         }
-        .bottom-nav button {
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 1.1em;
-            font-weight: bold;
-            cursor: pointer;
-            padding: 10px 20px;
-            border-radius: 20px;
-            transition: background-color 0.2s ease, transform 0.2s ease;
-        }
-        .bottom-nav button:hover {
-            background-color: var(--ui-bg-color-solid);
-            transform: scale(1.05);
-        }
-
-        /* Bottom-right play button */
         #playButton {
-            grid-area: play-button-area;
-            justify-self: end;
-            align-self: end;
             height: 120px;
             width: 280px;
             background-color: var(--button-color);
@@ -216,6 +185,7 @@
             position: relative;
             overflow: hidden;
             letter-spacing: 2px;
+            pointer-events: auto;
         }
         #playButton:hover {
             background-color: var(--button-hover-color);
@@ -226,7 +196,6 @@
             transform: translateY(-2px);
             box-shadow: 0 5px 10px var(--shadow-dark);
         }
-        /* Play button arrow effect */
         #playButton::after {
             content: '▶';
             font-size: 1em;
@@ -236,7 +205,37 @@
             transform: translateY(-50%);
         }
 
-        /* Settings Modal */
+        /* Bottom Nav Layer */
+        .bottom-nav-layer {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            z-index: 3;
+            pointer-events: none;
+        }
+        .bottom-nav {
+            display: flex;
+            gap: 15px;
+            pointer-events: auto;
+        }
+        .bottom-nav button {
+            background: var(--ui-bg-color);
+            border: none;
+            color: white;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 15px 30px;
+            border-radius: 25px;
+            box-shadow: 0 4px 8px var(--shadow-dark);
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        .bottom-nav button:hover {
+            background-color: var(--ui-bg-color-solid);
+            transform: scale(1.05);
+        }
+
+        /* Settings Modal (remains the same) */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -265,6 +264,7 @@
             border: 2px solid var(--accent-color);
             transform: scale(0.9);
             transition: transform 0.3s ease-in-out;
+            position: relative;
         }
         .modal-overlay.active .settings-modal {
             transform: scale(1);
@@ -293,35 +293,36 @@
 </head>
 <body>
     <section id="lobby">
-        <div class="profile-area">
-            <div class="profile-button"></div>
-            <div class="resource-box">
-                <p>Username</p>
+        <div class="header-ui">
+            <div class="profile-group">
+                <div class="profile-button"></div>
+                <div class="resource-box">
+                    <p>Username</p>
+                </div>
             </div>
+            <button class="settings-button" id="settingsButton"></button>
         </div>
         
         <div class="character-display">
             <div class="character-model-container">
-                <!-- Replace with your actual character image or model -->
                 <img src="brawl-star-character.png" alt="Character Display">
             </div>
         </div>
 
-        <div class="settings-area">
-            <button class="settings-button" id="settingsButton"></button>
+        <div class="play-button-layer">
+            <button id="playButton">PLAY</button>
         </div>
 
-        <div class="bottom-nav">
-            <button>Events</button>
-            <button>Brawlers</button>
-            <button>Shop</button>
-            <button>Social</button>
+        <div class="bottom-nav-layer">
+            <div class="bottom-nav">
+                <button>Events</button>
+                <button>Brawlers</button>
+                <button>Shop</button>
+                <button>Social</button>
+            </div>
         </div>
-
-        <button id="playButton">PLAY</button>
     </section>
 
-    <!-- Settings Modal -->
     <div class="modal-overlay" id="settingsModalOverlay">
         <div class="settings-modal" id="settingsModal">
             <span class="close-button" id="closeSettingsModal">&times;</span>
