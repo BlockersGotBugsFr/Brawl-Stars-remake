@@ -97,6 +97,11 @@
       color: rgba(255, 255, 255, 0.8);
       text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     }
+    #loading-percentage {
+      font-size: 1rem;
+      font-weight: normal;
+      margin-top: 5px;
+    }
 
     /* Loading Bar Style */
     .loading-bar {
@@ -130,6 +135,25 @@
     @keyframes shine {
       to { transform: translateX(100%); }
     }
+
+    /* "Tap to Continue" message */
+    #continue-message {
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+    }
+    #continue-message.visible {
+        opacity: 1;
+        animation: pulse-text 1.5s infinite;
+    }
+    @keyframes pulse-text {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
   </style>
 </head>
 <body>
@@ -147,8 +171,12 @@
         <div class="loading-bar">
           <div class="loading-progress" id="progress"></div>
         </div>
-        <div class="loading-text" id="loading-text">Loading...</div>
+        <div class="loading-text-container">
+          <span class="loading-text" id="loading-text">Loading...</span>
+          <span class="loading-text" id="loading-percentage">0%</span>
+        </div>
       </div>
+      <p id="continue-message">Tap to Continue</p>
     </div>
 
   <script>
@@ -158,6 +186,8 @@
       const loadingOverlay = document.getElementById('loading-overlay');
       const progressBar = document.getElementById('progress');
       const loadingText = document.getElementById('loading-text');
+      const loadingPercentage = document.getElementById('loading-percentage');
+      const continueMessage = document.getElementById('continue-message');
 
       const loadingHints = [
         'Optimizing game assets...',
@@ -170,16 +200,14 @@
 
       // Wait for the video to end before showing the loading screen
       video.onended = () => {
-        // Fade out the video screen
         intro.style.opacity = '0';
         
-        // After the fade-out, hide the video and show the loading overlay
         setTimeout(() => {
             intro.style.display = 'none';
             loadingOverlay.style.opacity = '1';
             loadingOverlay.style.pointerEvents = 'auto';
             startLoadingProgress();
-        }, 1000); // 1 second to match the CSS transition
+        }, 1000);
       };
 
       // Handle cases where video autoplay fails
@@ -187,39 +215,63 @@
       if (playPromise !== undefined) {
         playPromise.catch(() => {
           console.warn("Video autoplay failed, proceeding to loading screen.");
-          video.onended(); // Immediately trigger the end sequence
+          video.onended();
         });
       }
       
-      // The loading logic remains the same
+      // The loading logic with freezes and pauses
       function startLoadingProgress() {
         let progress = 0;
         let hintIndex = 0;
+        let isPaused = false;
+        let pauseDuration = 0;
+        let nextPause = getRandomInt(20, 80);
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
 
         function updateLoading() {
-          const increment = Math.random() * (100 - progress) / 25;
-          progress = Math.min(progress + increment, 100);
-          progressBar.style.width = progress + '%';
+            if (isPaused) {
+                if (pauseDuration <= 0) {
+                    isPaused = false;
+                } else {
+                    pauseDuration--;
+                }
+            } else {
+                let increment = 0.5;
+                if (progress >= 90) increment = 0.1; // Slow down near the end
+                progress = Math.min(progress + increment, 100);
+                progressBar.style.width = progress + '%';
+                loadingPercentage.textContent = Math.floor(progress) + '%';
 
-          if (progress > 10 && Math.random() > 0.95) {
-            loadingText.textContent = loadingHints[hintIndex];
-            hintIndex = (hintIndex + 1) % loadingHints.length;
-          }
+                // Check for random pauses
+                if (progress >= nextPause && progress < 99) {
+                    isPaused = true;
+                    pauseDuration = getRandomInt(50, 150);
+                    nextPause = getRandomInt(progress + 10, 95);
+                }
+            }
 
-          if (progress >= 100) {
-            setTimeout(() => {
-              loadingOverlay.style.opacity = '0';
-              setTimeout(() => {
-                window.location.href = 'lobby.html';
-              }, 1000); // Wait for fade-out
-            }, 500);
-          } else {
+            // Update hints randomly
+            if (Math.random() > 0.98) {
+                loadingText.textContent = loadingHints[hintIndex];
+                hintIndex = (hintIndex + 1) % loadingHints.length;
+            }
+
+            if (progress >= 100) {
+                loadingText.textContent = "Loading Complete!";
+                loadingPercentage.textContent = '100%';
+                continueMessage.classList.add('visible');
+                loadingOverlay.addEventListener('click', () => {
+                    window.location.href = 'lobby.html';
+                });
+                return; // Stop the animation loop
+            }
             requestAnimationFrame(updateLoading);
-          }
         }
         
-        // Start the progress simulation after the fade-in
-        setTimeout(updateLoading, 1000);
+        requestAnimationFrame(updateLoading);
       }
     });
   </script>
