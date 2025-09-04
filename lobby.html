@@ -5,33 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Lobby</title>
     <style>
+        :root {
+            --ui-bg-color: rgba(60, 60, 80, 0.7);
+            --button-color: #00BFFF;
+            --button-hover-color: #0095c9;
+            --accent-color: #FFD700; /* Gold-like color for accents */
+            --shadow-light: rgba(255, 255, 255, 0.1);
+            --shadow-dark: rgba(0, 0, 0, 0.6);
+        }
+
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: white;
             overflow: hidden;
-            background-color: #1a1a2e; /* Darker background for depth */
+            background-color: #1a1a2e;
         }
-        section {
+
+        /* Full-screen background and overlay */
+        #lobby {
             height: 100vh;
             width: 100vw;
             position: fixed;
             top: 0;
             left: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            transition: opacity 0.5s ease;
-        }
-        #lobby {
-            background-image: url('GameLobbyBg.png'); /* Ensure this image is high-quality */
+            background-image: url('GameLobbyBg.png');
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
-            z-index: 100;
-            opacity: 1;
-            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-areas: 
+                "profile-area . settings-area"
+                ". . ."
+                ". . play-button-area";
+            grid-template-rows: 15vh 1fr 20vh;
+            grid-template-columns: 350px 1fr 150px;
+            padding: 20px;
         }
         #lobby::before {
             content: '';
@@ -40,100 +50,237 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.4); /* Dark overlay */
+            background: rgba(0, 0, 0, 0.4);
             z-index: -1;
         }
 
-        /* UI Placeholder Elements - mimicking your mockup shapes */
-
-        /* Top-left long rounded rectangle */
-        .top-left-long-box {
-            position: absolute;
-            top: 40px;
-            left: 40px;
-            width: 250px;
-            height: 60px;
-            background-color: rgba(100, 100, 100, 0.7); /* Greyish, slightly transparent */
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        /* Top-left profile and resource area */
+        .profile-area {
+            grid-area: profile-area;
+            display: flex;
+            align-items: center;
+        }
+        .profile-button {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: var(--ui-bg-color);
+            background-image: url('profile-icon.png'); /* Profile icon image */
+            background-size: 70%;
+            background-repeat: no-repeat;
+            background-position: center;
+            border: 4px solid var(--accent-color);
+            box-shadow: 0 4px 8px var(--shadow-dark);
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+        .profile-button:hover {
+            transform: scale(1.05);
+            border-color: white;
+        }
+        .resource-box {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: var(--ui-bg-color);
+            border-radius: 25px;
+            box-shadow: 0 4px 8px var(--shadow-dark);
+            margin-left: -20px; /* Overlaps with the profile button */
+            height: 50px;
+            min-width: 200px;
+            position: relative;
+        }
+        .resource-box p {
+            margin-left: 25px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white;
         }
 
-        /* Top-left small rounded square */
-        .top-left-small-box {
-            position: absolute;
-            top: 40px;
-            left: 310px; /* Position next to the long box */
+        /* Top-right settings button */
+        .settings-area {
+            grid-area: settings-area;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .settings-button {
             width: 60px;
             height: 60px;
-            background-color: rgba(100, 100, 100, 0.7);
             border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            background-color: var(--ui-bg-color);
+            background-image: url('settings-icon.png'); /* Settings icon image */
+            background-size: 60%;
+            background-repeat: no-repeat;
+            background-position: center;
+            border: none;
+            box-shadow: 0 4px 8px var(--shadow-dark);
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+        .settings-button:hover {
+            transform: scale(1.05);
+            background-color: rgba(80, 80, 100, 0.7);
         }
 
-        /* Top-right small rounded square */
-        .top-right-small-box {
-            position: absolute;
-            top: 40px;
-            right: 40px;
-            width: 60px;
-            height: 60px;
-            background-color: rgba(100, 100, 100, 0.7);
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Bottom "Play Button" area - styled as a rounded rectangle */
+        /* Bottom-right play button */
         #playButton {
-            position: absolute;
-            bottom: 40px;
-            right: 50px;
+            grid-area: play-button-area;
+            justify-self: end;
+            align-self: end;
             height: 120px;
             width: 280px;
-            background-color: #00BFFF; /* A vibrant blue for a clear call to action */
+            background-color: var(--button-color);
             border: none;
             border-radius: 20px;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 8px 20px var(--shadow-dark);
             transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-            /* No text inside, so align a potential icon if added later */
             display: flex;
             justify-content: center;
             align-items: center;
+            font-size: 2em;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 5px var(--shadow-dark);
+            position: relative;
+            overflow: hidden;
         }
         #playButton:hover {
-            background-color: #0095c9;
+            background-color: var(--button-hover-color);
             transform: translateY(-5px);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 12px 25px var(--shadow-dark);
         }
         #playButton:active {
             transform: translateY(-2px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 5px 10px var(--shadow-dark);
+        }
+        /* Play button arrow effect */
+        #playButton::after {
+            content: '▶';
+            font-size: 1em;
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
         }
 
-        /* Placeholder for a play icon within the button if desired */
-        #playButton::after {
-            content: '▶'; /* Unicode play triangle */
-            font-size: 3em;
+        /* Settings Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 102;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+        .settings-modal {
+            background-color: var(--ui-bg-color);
+            padding: 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px var(--shadow-dark);
+            border: 2px solid var(--accent-color);
+            transform: scale(0.9);
+            transition: transform 0.3s ease-in-out;
+        }
+        .modal-overlay.active .settings-modal {
+            transform: scale(1);
+        }
+        .settings-modal h2 {
+            margin-top: 0;
+            text-align: center;
+            font-size: 2em;
+            color: var(--accent-color);
+            text-shadow: 1px 1px 3px var(--shadow-dark);
+        }
+        .settings-modal .close-button {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2em;
+            cursor: pointer;
             color: white;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+        }
+        .settings-modal .close-button:hover {
+            opacity: 1;
+        }
+
+        /* Animation for lobby entrance */
+        @keyframes fade-in {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .lobby-content {
+            animation: fade-in 1s ease-in-out forwards;
         }
     </style>
 </head>
 <body>
     <section id="lobby">
-        <!-- UI Placeholder Elements -->
-        <div class="top-left-long-box"></div>
-        <div class="top-left-small-box"></div>
-        <div class="top-right-small-box"></div>
+        <div class="profile-area">
+            <div class="profile-button"></div>
+            <div class="resource-box">
+                <p>Username</p>
+            </div>
+        </div>
+        
+        <div class="settings-area">
+            <button class="settings-button" id="settingsButton"></button>
+        </div>
 
-        <button id="playButton"></button>
+        <button id="playButton">PLAY</button>
     </section>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModalOverlay">
+        <div class="settings-modal" id="settingsModal">
+            <span class="close-button" id="closeSettingsModal">&times;</span>
+            <h2>Settings</h2>
+            <!-- Add settings options here -->
+            <p>Volume Control</p>
+            <p>Graphics Settings</p>
+            <p>Language</p>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const playButton = document.getElementById("playButton");
-
+            const settingsButton = document.getElementById("settingsButton");
+            const settingsModalOverlay = document.getElementById("settingsModalOverlay");
+            const closeSettingsModal = document.getElementById("closeSettingsModal");
+            
             playButton.addEventListener('click', () => {
+                // You can add an animation here before redirecting
                 window.location.href = "Game.html";
+            });
+
+            settingsButton.addEventListener('click', () => {
+                settingsModalOverlay.classList.add('active');
+            });
+
+            closeSettingsModal.addEventListener('click', () => {
+                settingsModalOverlay.classList.remove('active');
+            });
+
+            // Close modal when clicking outside of it
+            settingsModalOverlay.addEventListener('click', (event) => {
+                if (event.target === settingsModalOverlay) {
+                    settingsModalOverlay.classList.remove('active');
+                }
             });
         });
     </script>
