@@ -13,7 +13,7 @@
             --button-hover-color: #0095c9;
             --accent-color: #FFD700;
             --shadow-dark: rgba(0, 0, 0, 0.6);
-            --ui-border-radius: 15px;
+            --ui-border-radius: 20px;
             --font-size-base: clamp(14px, 1.5vw, 20px);
         }
 
@@ -52,9 +52,9 @@
         /* Header UI layer */
         .header-ui {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            right: 20px;
+            top: 4vh;
+            left: 5vw;
+            right: 5vw;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -67,12 +67,18 @@
             display: flex;
             align-items: center;
             pointer-events: auto;
+            background: var(--ui-bg-color);
+            border-radius: var(--ui-border-radius);
+            padding: 10px;
+            box-shadow: 0 4px 8px var(--shadow-dark);
+            position: relative;
+            left: -10px;
         }
         .profile-button {
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background-color: var(--ui-bg-color);
+            background-color: var(--ui-bg-color-solid);
             background-image: url('profile-icon.png');
             background-size: 70%;
             background-repeat: no-repeat;
@@ -90,17 +96,11 @@
             display: flex;
             align-items: center;
             padding: 10px 20px;
-            background-color: var(--ui-bg-color);
-            border-radius: 25px;
-            box-shadow: 0 4px 8px var(--shadow-dark);
-            margin-left: -20px;
-            height: 50px;
-            min-width: 200px;
+            margin-left: 10px;
             position: relative;
-            z-index: -1;
         }
         .resource-box p {
-            margin-left: 25px;
+            margin: 0;
             font-size: 1em;
             font-weight: bold;
         }
@@ -126,10 +126,10 @@
             background-color: rgba(80, 80, 100, 0.7);
         }
 
-        /* Main content layer for character display */
+        /* Character display */
         .character-display {
             position: absolute;
-            top: 0;
+            bottom: 0;
             left: 0;
             width: 100%;
             height: 100%;
@@ -151,21 +151,55 @@
             height: auto;
             object-fit: contain;
             animation: float-character 4s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
         }
         @keyframes float-character {
             0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-15px); }
             100% { transform: translateY(0px); }
         }
 
-        /* Play Button layer */
-        .play-button-layer {
+        /* Button group and Play button layers */
+        .main-ui-group {
             position: absolute;
-            bottom: 40px;
-            right: 40px;
+            bottom: 4vh;
+            left: 5vw;
+            right: 5vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             z-index: 3;
             pointer-events: none;
         }
+
+        /* Bottom Nav Layer */
+        .bottom-nav {
+            display: flex;
+            gap: 10px;
+            background: var(--ui-bg-color);
+            border-radius: var(--ui-border-radius);
+            box-shadow: 0 -4px 10px var(--shadow-dark);
+            pointer-events: auto;
+            padding: 10px 15px;
+        }
+        .bottom-nav button {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 15px 25px;
+            border-radius: 15px;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            position: relative;
+        }
+        .bottom-nav button:hover {
+            background-color: var(--ui-bg-color-solid);
+            transform: translateY(-5px);
+        }
+
+        /* Play button styling */
         #playButton {
             height: 120px;
             width: 280px;
@@ -205,37 +239,7 @@
             transform: translateY(-50%);
         }
 
-        /* Bottom Nav Layer */
-        .bottom-nav-layer {
-            position: absolute;
-            bottom: 40px;
-            left: 40px;
-            z-index: 3;
-            pointer-events: none;
-        }
-        .bottom-nav {
-            display: flex;
-            gap: 15px;
-            pointer-events: auto;
-        }
-        .bottom-nav button {
-            background: var(--ui-bg-color);
-            border: none;
-            color: white;
-            font-size: 1.1em;
-            font-weight: bold;
-            cursor: pointer;
-            padding: 15px 30px;
-            border-radius: 25px;
-            box-shadow: 0 4px 8px var(--shadow-dark);
-            transition: background-color 0.2s ease, transform 0.2s ease;
-        }
-        .bottom-nav button:hover {
-            background-color: var(--ui-bg-color-solid);
-            transform: scale(1.05);
-        }
-
-        /* Settings Modal (remains the same) */
+        /* Shared Modal Styles */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -254,29 +258,29 @@
             display: flex;
             opacity: 1;
         }
-        .settings-modal {
+        .modal-content {
             background-color: var(--ui-bg-color-solid);
             padding: 40px;
-            border-radius: 20px;
+            border-radius: var(--ui-border-radius);
             width: 90%;
-            max-width: 500px;
+            max-width: 600px;
             box-shadow: 0 10px 30px var(--shadow-dark);
             border: 2px solid var(--accent-color);
             transform: scale(0.9);
             transition: transform 0.3s ease-in-out;
             position: relative;
         }
-        .modal-overlay.active .settings-modal {
+        .modal-overlay.active .modal-content {
             transform: scale(1);
         }
-        .settings-modal h2 {
+        .modal-content h2 {
             margin-top: 0;
             text-align: center;
             font-size: 2em;
             color: var(--accent-color);
             text-shadow: 1px 1px 3px var(--shadow-dark);
         }
-        .settings-modal .close-button {
+        .modal-content .close-button {
             position: absolute;
             top: 15px;
             right: 20px;
@@ -286,7 +290,7 @@
             opacity: 0.7;
             transition: opacity 0.2s ease;
         }
-        .settings-modal .close-button:hover {
+        .modal-content .close-button:hover {
             opacity: 1;
         }
     </style>
@@ -295,12 +299,12 @@
     <section id="lobby">
         <div class="header-ui">
             <div class="profile-group">
-                <div class="profile-button"></div>
+                <button class="profile-button" data-modal-target="profileModal"></button>
                 <div class="resource-box">
                     <p>Username</p>
                 </div>
             </div>
-            <button class="settings-button" id="settingsButton"></button>
+            <button class="settings-button" data-modal-target="settingsModal"></button>
         </div>
         
         <div class="character-display">
@@ -309,53 +313,94 @@
             </div>
         </div>
 
-        <div class="play-button-layer">
-            <button id="playButton">PLAY</button>
-        </div>
-
-        <div class="bottom-nav-layer">
+        <div class="main-ui-group">
             <div class="bottom-nav">
-                <button>Events</button>
-                <button>Brawlers</button>
-                <button>Shop</button>
-                <button>Social</button>
+                <button data-modal-target="eventsModal">Events</button>
+                <button data-modal-target="brawlersModal">Brawlers</button>
+                <button data-modal-target="shopModal">Shop</button>
+                <button data-modal-target="socialModal">Social</button>
             </div>
+            <button id="playButton">PLAY</button>
         </div>
     </section>
 
-    <div class="modal-overlay" id="settingsModalOverlay">
-        <div class="settings-modal" id="settingsModal">
-            <span class="close-button" id="closeSettingsModal">&times;</span>
+    <!-- Modal Popups -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Profile</h2>
+            <p>User stats, rank, and other profile details go here.</p>
+        </div>
+    </div>
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
             <h2>Settings</h2>
             <p>Volume Control</p>
             <p>Graphics Settings</p>
             <p>Language</p>
         </div>
     </div>
+    <div class="modal-overlay" id="eventsModal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Events</h2>
+            <p>Daily and special events information.</p>
+        </div>
+    </div>
+    <div class="modal-overlay" id="brawlersModal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Brawlers</h2>
+            <p>Your character selection screen.</p>
+        </div>
+    </div>
+    <div class="modal-overlay" id="shopModal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Shop</h2>
+            <p>Items and in-game purchases.</p>
+        </div>
+    </div>
+    <div class="modal-overlay" id="socialModal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Social</h2>
+            <p>Friends list, clubs, and social features.</p>
+        </div>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const playButton = document.getElementById("playButton");
-            const settingsButton = document.getElementById("settingsButton");
-            const settingsModalOverlay = document.getElementById("settingsModalOverlay");
-            const closeSettingsModal = document.getElementById("closeSettingsModal");
+            const modalButtons = document.querySelectorAll('[data-modal-target]');
+            const closeButtons = document.querySelectorAll('.close-button');
             
+            modalButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const modal = document.getElementById(button.dataset.modalTarget);
+                    if (modal) {
+                        modal.classList.add('active');
+                    }
+                });
+            });
+
+            closeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    button.closest('.modal-overlay').classList.remove('active');
+                });
+            });
+
+            document.querySelectorAll('.modal-overlay').forEach(overlay => {
+                overlay.addEventListener('click', (event) => {
+                    if (event.target === overlay) {
+                        overlay.classList.remove('active');
+                    }
+                });
+            });
+
             playButton.addEventListener('click', () => {
                 window.location.href = "Game.html";
-            });
-
-            settingsButton.addEventListener('click', () => {
-                settingsModalOverlay.classList.add('active');
-            });
-
-            closeSettingsModal.addEventListener('click', () => {
-                settingsModalOverlay.classList.remove('active');
-            });
-
-            settingsModalOverlay.addEventListener('click', (event) => {
-                if (event.target === settingsModalOverlay) {
-                    settingsModalOverlay.classList.remove('active');
-                }
             });
         });
     </script>
