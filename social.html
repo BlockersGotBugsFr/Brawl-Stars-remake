@@ -1,1 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social</title>
+    <style>
+        /* Base styles and variables */
+        :root {
+            --ui-bg-color: rgba(60, 60, 80, 0.85);
+            --ui-bg-color-solid: #3c3c50;
+            --button-color: #00BFFF;
+            --accent-color: #FFD700;
+            --shadow-dark: rgba(0, 0, 0, 0.6);
+            --ui-border-radius: 20px;
+            --font-size-base: clamp(14px, 1.5vw, 20px);
+            --online-color: #32CD32; /* Lime green for online status */
+            --offline-color: #808080; /* Gray for offline status */
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            overflow: hidden;
+            background-color: #1a1a2e;
+            font-size: var(--font-size-base);
+        }
+
+        /* Full-screen container */
+        #social-page {
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+            background-image: url('GameLobbyBg.png'); /* Use your lobby background here */
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            overflow-y: auto;
+        }
+        
+        #social-page::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(2px);
+            z-index: 1;
+        }
+
+        /* Back Button */
+        #back-button {
+            position: absolute;
+            top: 4vh;
+            left: 5vw;
+            width: 60px;
+            height: 60px;
+            border-radius: var(--ui-border-radius);
+            background-color: var(--ui-bg-color);
+            border: none;
+            box-shadow: 0 4px 8px var(--shadow-dark);
+            cursor: pointer;
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+        #back-button:hover {
+            transform: scale(1.05);
+            background-color: var(--ui-bg-color-solid);
+        }
+        #back-button::after {
+            content: '×'; /* Using a cross symbol for close/back */
+            font-size: 2.5em;
+            color: white;
+            text-shadow: 1px 1px 3px var(--shadow-dark);
+        }
+        
+        .social-container {
+            z-index: 2;
+            position: relative;
+            max-width: 1200px;
+            margin: 15vh auto 5vh;
+            padding: 0 20px;
+        }
+
+        .social-container h1 {
+            text-align: center;
+            font-size: 3em;
+            color: var(--accent-color);
+            text-shadow: 2px 2px 5px var(--shadow-dark);
+            margin-bottom: 5vh;
+        }
+
+        .social-section {
+            margin-bottom: 50px;
+        }
+
+        .social-section h2 {
+            font-size: 2em;
+            color: white;
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 3px var(--shadow-dark);
+        }
+
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .social-card {
+            background: var(--ui-bg-color);
+            border-radius: var(--ui-border-radius);
+            overflow: hidden;
+            box-shadow: 0 8px 15px var(--shadow-dark);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .friends-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .friend-item {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 10px;
+            transition: transform 0.2s ease;
+        }
+        .friend-item:hover {
+            transform: translateX(5px);
+        }
+
+        .friend-status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+        .friend-item.online .friend-status-dot {
+            background-color: var(--online-color);
+        }
+        .friend-item.offline .friend-status-dot {
+            background-color: var(--offline-color);
+        }
+        .friend-name {
+            font-weight: bold;
+        }
+        
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .social-link-item {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 10px;
+            transition: transform 0.2s ease, background 0.2s ease;
+            text-decoration: none;
+            color: white;
+        }
+        .social-link-item:hover {
+            background: rgba(0, 0, 0, 0.4);
+            transform: translateX(5px);
+        }
+
+        .social-link-icon {
+            width: 30px;
+            height: 30px;
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div id="social-page">
+        <button id="back-button"></button>
+
+        <div class="social-container">
+            <h1>Social</h1>
+            
+            <div class="social-grid">
+                <div class="social-section">
+                    <h2>Friends</h2>
+                    <div class="social-card">
+                        <div class="friends-list">
+                            <div class="friend-item online">
+                                <div class="friend-status-dot"></div>
+                                <span class="friend-name">Player123</span>
+                            </div>
+                            <div class="friend-item online">
+                                <div class="friend-status-dot"></div>
+                                <span class="friend-name">GamerPro</span>
+                            </div>
+                            <div class="friend-item offline">
+                                <div class="friend-status-dot"></div>
+                                <span class="friend-name">ShadowBlade</span>
+                            </div>
+                            <div class="friend-item offline">
+                                <div class="friend-status-dot"></div>
+                                <span class="friend-name">Cipher</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="social-section">
+                    <h2>Clubs</h2>
+                    <div class="social-card">
+                        <p>Join or create a club to team up and climb the ranks!</p>
+                        <p>Your Club:</p>
+                        <div class="friends-list">
+                            <div class="friend-item online">
+                                <div class="friend-status-dot" style="background-color: #FF4500;"></div>
+                                <span class="friend-name">CiphAnon Alliance</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="social-section">
+                <h2>Our Channels</h2>
+                <div class="social-card">
+                    <div class="social-links">
+                        <a href="https://www.youtube.com/@CiphAnonStudios" target="_blank" class="social-link-item">
+                            <img src="youtube-icon.png" alt="YouTube" class="social-link-icon">
+                            <span>@CiphAnonStudios</span>
+                        </a>
+                        <a href="https://www.youtube.com/@ItsToonyTime" target="_blank" class="social-link-item">
+                            <img src="youtube-icon.png" alt="YouTube" class="social-link-icon">
+                            <span>@ItsToonyTime</span>
+                        </a>
+                        <a href="https://www.youtube.com/@DeledaoUnblocked" target="_blank" class="social-link-item">
+                            <img src="youtube-icon.png" alt="YouTube" class="social-link-icon">
+                            <span>@DeledaoUnblocked</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const backButton = document.getElementById('back-button');
+
+            backButton.addEventListener('click', () => {
+                window.location.href = "index.html";
+            });
+        });
+    </script>
+</body>
+</html>
 
