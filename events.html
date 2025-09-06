@@ -1,1 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Events</title>
+    <style>
+        /* Base styles and variables */
+        :root {
+            --ui-bg-color: rgba(60, 60, 80, 0.85);
+            --ui-bg-color-solid: #3c3c50;
+            --button-color: #00BFFF;
+            --accent-color: #FFD700;
+            --shadow-dark: rgba(0, 0, 0, 0.6);
+            --ui-border-radius: 20px;
+            --font-size-base: clamp(14px, 1.5vw, 20px);
+        }
 
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            overflow: hidden;
+            background-color: #1a1a2e;
+            font-size: var(--font-size-base);
+        }
+
+        /* Full-screen container */
+        #events-page {
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+            background-image: url('GameLobbyBg.png'); /* Use your lobby background here */
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            overflow-y: auto;
+        }
+        
+        #events-page::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(2px);
+            z-index: 1;
+        }
+
+        /* Back Button */
+        #back-button {
+            position: absolute;
+            top: 4vh;
+            left: 5vw;
+            width: 60px;
+            height: 60px;
+            border-radius: var(--ui-border-radius);
+            background-color: var(--ui-bg-color);
+            border: none;
+            box-shadow: 0 4px 8px var(--shadow-dark);
+            cursor: pointer;
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+        #back-button:hover {
+            transform: scale(1.05);
+            background-color: var(--ui-bg-color-solid);
+        }
+        #back-button::after {
+            content: '×'; /* Using a cross symbol for close/back */
+            font-size: 2.5em;
+            color: white;
+            text-shadow: 1px 1px 3px var(--shadow-dark);
+        }
+        
+        .events-container {
+            z-index: 2;
+            position: relative;
+            max-width: 1200px;
+            margin: 15vh auto 5vh;
+            padding: 0 20px;
+        }
+
+        .events-container h1 {
+            text-align: center;
+            font-size: 3em;
+            color: var(--accent-color);
+            text-shadow: 2px 2px 5px var(--shadow-dark);
+            margin-bottom: 5vh;
+        }
+
+        .event-section {
+            margin-bottom: 50px;
+        }
+
+        .event-section h2 {
+            font-size: 2em;
+            color: white;
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 3px var(--shadow-dark);
+        }
+
+        .event-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .event-card {
+            background: var(--ui-bg-color);
+            border-radius: var(--ui-border-radius);
+            overflow: hidden;
+            box-shadow: 0 8px 15px var(--shadow-dark);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .event-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 25px var(--shadow-dark);
+        }
+
+        .event-card-header {
+            height: 150px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding: 15px;
+        }
+
+        .event-card-header h3 {
+            margin: 0;
+            font-size: 1.5em;
+            text-shadow: 1px 1px 3px var(--shadow-dark);
+        }
+
+        .event-card-body {
+            padding: 20px;
+        }
+
+        .event-card-body p {
+            margin: 0;
+            font-size: 1em;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .event-card-body .event-date {
+            margin-top: 10px;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="events-page">
+        <button id="back-button"></button>
+
+        <div class="events-container">
+            <h1>Game Events</h1>
+            
+            <div class="event-section">
+                <h2>Featured</h2>
+                <div class="event-cards-grid">
+                    <div class="event-card">
+                        <div class="event-card-header" style="background-image: url('featured-event-1.png');">
+                            <h3>Season 1: Grand Opening</h3>
+                        </div>
+                        <div class="event-card-body">
+                            <p>Dive into the all-new map with fresh mechanics and exclusive rewards.</p>
+                            <p class="event-date">Ends: Oct 31, 2025</p>
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-card-header" style="background-image: url('featured-event-2.png');">
+                            <h3>Double XP Weekend</h3>
+                        </div>
+                        <div class="event-card-body">
+                            <p>Level up faster than ever and show off your progression.</p>
+                            <p class="event-date">September 27-29, 2025</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="event-section">
+                <h2>Upcoming</h2>
+                <div class="event-cards-grid">
+                    <div class="event-card">
+                        <div class="event-card-header" style="background-image: url('upcoming-event-1.png');">
+                            <h3>Haunted Harvest</h3>
+                        </div>
+                        <div class="event-card-body">
+                            <p>A spooky new event with limited-time characters and gear.</p>
+                            <p class="event-date">Starts: October 1, 2025</p>
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-card-header" style="background-image: url('upcoming-event-2.png');">
+                            <h3>Winter Wonderland</h3>
+                        </div>
+                        <div class="event-card-body">
+                            <p>Get into the holiday spirit with festive outfits and challenges.</p>
+                            <p class="event-date">Starts: December 1, 2025</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="event-section">
+                <h2>Limited-Time</h2>
+                <div class="event-cards-grid">
+                    <div class="event-card">
+                        <div class="event-card-header" style="background-image: url('limited-event-1.png');">
+                            <h3>Last Chance: Golden Skin</h3>
+                        </div>
+                        <div class="event-card-body">
+                            <p>Don't miss your final opportunity to earn the exclusive Golden Rogue skin.</p>
+                            <p class="event-date">Ends: Today!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const backButton = document.getElementById('back-button');
+
+            backButton.addEventListener('click', () => {
+                window.location.href = "index.html";
+            });
+        });
+    </script>
+</body>
+</html>
