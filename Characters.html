@@ -1,1 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Selection</title>
+    <style>
+        /* Base styles and variables */
+        :root {
+            --ui-bg-color: rgba(60, 60, 80, 0.8);
+            --ui-bg-color-solid: #3c3c50;
+            --button-color: #00BFFF;
+            --accent-color: #FFD700;
+            --shadow-dark: rgba(0, 0, 0, 0.6);
+            --ui-border-radius: 20px;
+            --font-size-base: clamp(14px, 1.5vw, 20px);
+        }
 
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            overflow: hidden;
+            background-color: #1a1a2e;
+            font-size: var(--font-size-base);
+        }
+
+        /* Full-screen container */
+        #character-page {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            position: relative;
+            background-image: url('GameLobbyBg.png'); /* Use your lobby background here */
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+        }
+        
+        #character-page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(2px);
+            z-index: 1;
+        }
+
+        /* Back Button */
+        #back-button {
+            position: absolute;
+            top: 4vh;
+            left: 5vw;
+            width: 60px;
+            height: 60px;
+            border-radius: var(--ui-border-radius);
+            background-color: var(--ui-bg-color);
+            border: none;
+            box-shadow: 0 4px 8px var(--shadow-dark);
+            cursor: pointer;
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+        #back-button:hover {
+            transform: scale(1.05);
+            background-color: var(--ui-bg-color-solid);
+        }
+        #back-button::after {
+            content: '×'; /* Using a cross symbol for close/back */
+            font-size: 2.5em;
+            color: white;
+            text-shadow: 1px 1px 3px var(--shadow-dark);
+        }
+
+        /* Character List (Left Panel) */
+        .character-list {
+            flex-basis: 35%;
+            height: 100%;
+            padding: 10vh 2vw;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            overflow-y: auto;
+            scrollbar-width: none; /* Hide scrollbar for aesthetics */
+            z-index: 2;
+        }
+        .character-list::-webkit-scrollbar {
+            display: none;
+        }
+
+        .character-card {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: var(--ui-bg-color);
+            border-radius: var(--ui-border-radius);
+            box-shadow: 0 4px 8px var(--shadow-dark);
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .character-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: var(--ui-border-radius);
+            border: 2px solid transparent;
+            transition: border-color 0.2s ease;
+            pointer-events: none;
+        }
+        .character-card:hover {
+            transform: translateY(-5px);
+            background: var(--ui-bg-color-solid);
+        }
+        .character-card.active {
+            background: var(--ui-bg-color-solid);
+            border: 2px solid var(--accent-color);
+            transform: translateY(-5px);
+        }
+        .character-card img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-color);
+            margin-right: 15px;
+        }
+        .character-card .name {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        /* Character Info (Right Panel) */
+        .character-info {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            text-align: center;
+            z-index: 2;
+            padding: 5vh 5vw;
+        }
+        .character-model {
+            width: 60%;
+            max-width: 800px;
+            height: auto;
+            filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.8));
+            transition: transform 0.5s ease;
+            animation: float-character 4s ease-in-out infinite;
+        }
+        @keyframes float-character {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .character-details-box {
+            background: var(--ui-bg-color);
+            border-radius: var(--ui-border-radius);
+            padding: 20px 40px;
+            box-shadow: 0 4px 15px var(--shadow-dark);
+            margin-top: 20px;
+            width: 80%;
+            max-width: 600px;
+            text-align: left;
+        }
+        .character-details-box h2 {
+            text-align: center;
+            color: var(--accent-color);
+            font-size: 2em;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px var(--shadow-dark);
+        }
+        .character-details-box p {
+            margin: 5px 0;
+            line-height: 1.4;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="character-page">
+        <button id="back-button"></button>
+
+        <div class="character-list">
+            <!-- Character cards will be dynamically inserted here -->
+        </div>
+
+        <div class="character-info">
+            <img src="" alt="Character Model" class="character-model" id="character-model">
+            <div class="character-details-box">
+                <h2 id="character-name">Select a Character</h2>
+                <p><strong>Ability:</strong> <span id="character-ability"></span></p>
+                <p><strong>Bio:</strong> <span id="character-bio"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const characters = [
+                {
+                    name: "Echo",
+                    image: "echo-icon.png",
+                    model: "echo-model.png",
+                    ability: "Disruptive Echoes: Stuns enemies in a large radius.",
+                    bio: "A master of sound manipulation, Echo moves silently and strikes with powerful sonic waves."
+                },
+                {
+                    name: "Seraph",
+                    image: "seraph-icon.png",
+                    model: "seraph-model.png",
+                    ability: "Divine Judgement: Calls down a beam of light, healing allies and damaging enemies.",
+                    bio: "A beacon of hope on the battlefield, Seraph protects her team with divine power."
+                },
+                {
+                    name: "Rogue",
+                    image: "rogue-icon.png",
+                    model: "rogue-model.png",
+                    ability: "Shadow Dash: Teleports short distances and becomes briefly invulnerable.",
+                    bio: "An enigmatic assassin who thrives in the shadows, Rogue deals devastating damage from unexpected angles."
+                }
+                // Add more characters here
+            ];
+
+            const characterListContainer = document.querySelector('.character-list');
+            const characterModel = document.getElementById('character-model');
+            const characterName = document.getElementById('character-name');
+            const characterAbility = document.getElementById('character-ability');
+            const characterBio = document.getElementById('character-bio');
+            const backButton = document.getElementById('back-button');
+
+            // Populate character list
+            characters.forEach(char => {
+                const card = document.createElement('div');
+                card.classList.add('character-card');
+                card.dataset.name = char.name;
+                card.innerHTML = `
+                    <img src="${char.image}" alt="${char.name} Icon">
+                    <span class="name">${char.name}</span>
+                `;
+                characterListContainer.appendChild(card);
+            });
+
+            // Handle character selection
+            characterListContainer.addEventListener('click', (event) => {
+                const card = event.target.closest('.character-card');
+                if (card) {
+                    // Remove active class from all cards
+                    document.querySelectorAll('.character-card').forEach(c => c.classList.remove('active'));
+                    // Add active class to the clicked card
+                    card.classList.add('active');
+
+                    // Find selected character data
+                    const selectedChar = characters.find(char => char.name === card.dataset.name);
+
+                    // Update the display with the selected character's info
+                    if (selectedChar) {
+                        characterModel.src = selectedChar.model;
+                        characterName.textContent = selectedChar.name;
+                        characterAbility.textContent = selectedChar.ability;
+                        characterBio.textContent = selectedChar.bio;
+                    }
+                }
+            });
+
+            // Handle back button click
+            backButton.addEventListener('click', () => {
+                window.location.href = "index.html";
+            });
+        });
+    </script>
+</body>
+</html>
