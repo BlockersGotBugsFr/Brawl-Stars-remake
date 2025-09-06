@@ -9,8 +9,8 @@
         :root {
             --ui-bg-color: rgba(60, 60, 80, 0.7);
             --ui-bg-color-solid: #3c3c50;
-            --button-color: #FF5722; /* Vibrant orange for play button */
-            --button-hover-color: #e64a19;
+            --button-color: #00BFFF;
+            --button-hover-color: #0095c9;
             --accent-color: #FFD700;
             --shadow-dark: rgba(0, 0, 0, 0.6);
             --ui-border-radius: 20px;
@@ -89,239 +89,210 @@
             transition: transform 0.2s ease, border-color 0.2s ease;
         }
         .profile-button:hover {
-    transform: scale(1.05);
-    border-color: white;
-}
-.resource-box {
-    display: flex;
-    align-items: center;
-    padding: 10px 20px;
-    margin-left: 10px;
-    position: relative;
-}
-.resource-box p {
-    margin: 0;
-    font-size: 1em;
-    font-weight: bold;
-}
+            transform: scale(1.05);
+            border-color: white;
+        }
+        .resource-box {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            margin-left: 10px;
+            position: relative;
+        }
+        .resource-box p {
+            margin: 0;
+            font-size: 1em;
+            font-weight: bold;
+        }
 
-/* Settings button */
-.settings-button {
-    width: 60px;
-    height: 60px;
-    border-radius: var(--ui-border-radius);
-    background-color: var(--ui-bg-color);
-    background-image: url('settings-icon.png');
-    background-size: 60%;
-    background-repeat: no-repeat;
-    background-position: center;
-    border: none;
-    box-shadow: 0 4px 8px var(--shadow-dark);
-    cursor: pointer;
-    transition: transform 0.2s ease, background-color 0.2s ease;
-    pointer-events: auto;
-}
-.settings-button:hover {
-    transform: scale(1.05);
-    background-color: rgba(80, 80, 100, 0.7);
-}
+        /* Settings button */
+        .settings-button {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--ui-border-radius);
+            background-color: var(--ui-bg-color);
+            background-image: url('settings-icon.png');
+            background-size: 60%;
+            background-repeat: no-repeat;
+            background-position: center;
+            border: none;
+            box-shadow: 0 4px 8px var(--shadow-dark);
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            pointer-events: auto;
+        }
+        .settings-button:hover {
+            transform: scale(1.05);
+            background-color: rgba(80, 80, 100, 0.7);
+        }
 
-/* Battle Royale-focused layout */
-.main-ui-group {
-    position: absolute;
-    bottom: 4vh;
-    left: 5vw;
-    right: 5vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 3vw; /* Increased gap for a cleaner layout */
-    z-index: 3;
-    pointer-events: none;
-}
+        /* Character display */
+        .character-display {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .character-model-container {
+            width: 60%;
+            max-width: 1000px;
+            margin-bottom: 20vh;
+            text-align: center;
+            pointer-events: auto;
+        }
+        .character-model-container img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            animation: float-character 4s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+        }
+        @keyframes float-character {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
 
-/* Bottom Nav Layer */
-.bottom-nav {
-    display: flex;
-    gap: 10px;
-    background: var(--ui-bg-color);
-    border-radius: var(--ui-border-radius);
-    box-shadow: 0 -4px 10px var(--shadow-dark);
-    pointer-events: auto;
-    padding: 10px 15px;
-}
-.bottom-nav button {
-    background: transparent;
-    border: none;
-    color: white;
-    font-size: 1em; /* Adjusted font size */
-    font-weight: bold;
-    cursor: pointer;
-    padding: 15px 25px;
-    border-radius: 15px;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-    position: relative;
-}
-.bottom-nav button:hover {
-    background-color: var(--ui-bg-color-solid);
-    transform: translateY(-5px);
-}
+        /* Button group and Play button layers */
+        .main-ui-group {
+            position: absolute;
+            bottom: 4vh;
+            left: 5vw;
+            right: 5vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 3;
+            pointer-events: none;
+        }
 
-/* Play button centered and emphasized */
-#playButton {
-    height: 120px;
-    width: 280px;
-    background-color: var(--button-color);
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    box-shadow: 0 8px 20px var(--shadow-dark);
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2em;
-    font-weight: bold;
-    color: white;
-    text-shadow: 2px 2px 5px var(--shadow-dark);
-    position: relative;
-    overflow: hidden;
-    letter-spacing: 2px;
-    pointer-events: auto;
-}
-#playButton:hover {
-    background-color: var(--button-hover-color);
-    transform: translateY(-5px);
-    box-shadow: 0 12px 25px var(--shadow-dark);
-}
-#playButton:active {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 10px var(--shadow-dark);
-}
-#playButton::after {
-    content: '▶';
-    font-size: 1em;
-    position: absolute;
-    right: 25px;
-    top: 50%;
-    transform: translateY(-50%);
-}
+        /* Bottom Nav Layer */
+        .bottom-nav {
+            display: flex;
+            gap: 10px;
+            background: var(--ui-bg-color);
+            border-radius: var(--ui-border-radius);
+            box-shadow: 0 -4px 10px var(--shadow-dark);
+            pointer-events: auto;
+            padding: 10px 15px;
+        }
+        .bottom-nav button {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 15px 25px;
+            border-radius: 15px;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            position: relative;
+        }
+        .bottom-nav button:hover {
+            background-color: var(--ui-bg-color-solid);
+            transform: translateY(-5px);
+        }
 
-/* Character display */
-.character-display {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    z-index: 2;
-    pointer-events: none;
-}
-.character-model-container {
-    width: 60%;
-    max-width: 1000px;
-    margin-bottom: 25vh; /* Adjusted for centered feel */
-    text-align: center;
-    pointer-events: auto;
-}
-.character-model-container img {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    animation: float-character 4s ease-in-out infinite;
-    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
-}
-@keyframes float-character {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-15px); }
-    100% { transform: translateY(0px); }
-}
+        /* Play button styling */
+        #playButton {
+            height: 120px;
+            width: 280px;
+            background-color: var(--button-color);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px var(--shadow-dark);
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 5px var(--shadow-dark);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 2px;
+            pointer-events: auto;
+        }
+        #playButton:hover {
+            background-color: var(--button-hover-color);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px var(--shadow-dark);
+        }
+        #playButton:active {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px var(--shadow-dark);
+        }
+        #playButton::after {
+            content: '▶';
+            font-size: 1em;
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
 
-/* Character selection button group */
-.character-select-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    pointer-events: auto;
-    gap: 15px;
-}
-.character-button {
-    background: var(--ui-bg-color);
-    border: none;
-    color: white;
-    font-size: 1.1em;
-    font-weight: bold;
-    cursor: pointer;
-    padding: 15px 30px;
-    border-radius: var(--ui-border-radius);
-    box-shadow: 0 4px 8px var(--shadow-dark);
-    transition: background-color 0.2s ease, transform 0.2s ease;
-    width: 100%;
-    max-width: 200px;
-}
-.character-button:hover {
-    background-color: var(--ui-bg-color-solid);
-    transform: scale(1.05);
-}
-
-/* Shared Modal Styles (unchanged) */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 102;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-}
-.modal-overlay.active {
-    display: flex;
-    opacity: 1;
-}
-.modal-content {
-    background-color: var(--ui-bg-color-solid);
-    padding: 40px;
-    border-radius: var(--ui-border-radius);
-    width: 90%;
-    max-width: 600px;
-    box-shadow: 0 10px 30px var(--shadow-dark);
-    border: 2px solid var(--accent-color);
-    transform: scale(0.9);
-    transition: transform 0.3s ease-in-out;
-    position: relative;
-}
-.modal-overlay.active .modal-content {
-    transform: scale(1);
-}
-.modal-content h2 {
-    margin-top: 0;
-    text-align: center;
-    font-size: 2em;
-    color: var(--accent-color);
-    text-shadow: 1px 1px 3px var(--shadow-dark);
-}
-.modal-content .close-button {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 2em;
-    cursor: pointer;
-    color: white;
-    opacity: 0.7;
-    transition: opacity 0.2s ease;
-}
-.modal-content .close-button:hover {
-    opacity: 1;
-}
+        /* Shared Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 102;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+        .modal-content {
+            background-color: var(--ui-bg-color-solid);
+            padding: 40px;
+            border-radius: var(--ui-border-radius);
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 10px 30px var(--shadow-dark);
+            border: 2px solid var(--accent-color);
+            transform: scale(0.9);
+            transition: transform 0.3s ease-in-out;
+            position: relative;
+        }
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+        .modal-content h2 {
+            margin-top: 0;
+            text-align: center;
+            font-size: 2em;
+            color: var(--accent-color);
+            text-shadow: 1px 1px 3px var(--shadow-dark);
+        }
+        .modal-content .close-button {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2em;
+            cursor: pointer;
+            color: white;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+        }
+        .modal-content .close-button:hover {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -338,34 +309,32 @@
         
         <div class="character-display">
             <div class="character-model-container">
-                <img src="brawl-star-character.png" alt="Character Display">
+                <img src="" alt="Character Display">
             </div>
         </div>
 
         <div class="main-ui-group">
-            <div class="character-select-group">
-                <button class="character-button" data-modal-target="brawlersModal">CHARACTERS</button>
-                <button class="character-button" data-modal-target="eventsModal">EVENTS</button>
-            </div>
-            <button id="playButton">PLAY</button>
             <div class="bottom-nav">
+                <button data-modal-target="eventsModal">Events</button>
+                <button id="characters-button">Characters</button>
                 <button data-modal-target="shopModal">Shop</button>
                 <button data-modal-target="socialModal">Social</button>
             </div>
+            <button id="playButton">PLAY</button>
         </div>
     </section>
 
     <!-- Modal Popups -->
     <div class="modal-overlay" id="profileModal">
         <div class="modal-content">
-            <span class="close-button">&times;</span>
+            <span class="close-button" data-close-action="return">×</span>
             <h2>Profile</h2>
             <p>User stats, rank, and other profile details</p>
         </div>
     </div>
     <div class="modal-overlay" id="settingsModal">
         <div class="modal-content">
-            <span class="close-button">&times;</span>
+            <span class="close-button" data-close-action="return">×</span>
             <h2>Settings</h2>
             <p>Volume Control</p>
             <p>Graphics Settings</p>
@@ -375,21 +344,14 @@
     </div>
     <div class="modal-overlay" id="eventsModal">
         <div class="modal-content">
-            <span class="close-button">&times;</span>
+            <span class="close-button" data-close-action="return">×</span>
             <h2>Events</h2>
             <p>special event information/updates.</p>
         </div>
     </div>
-    <div class="modal-overlay" id="brawlersModal">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <h2>Characters</h2>
-            <p>character selection screen</p>
-        </div>
-    </div>
     <div class="modal-overlay" id="shopModal">
         <div class="modal-content">
-            <span class="close-button">&times;</span>
+            <span class="close-button" data-close-action="return">×</span>
             <h2>Shop</h2>
             <p>Items and in-game purchases</p>
             <p>(future: donation and paid items)</p>
@@ -397,7 +359,7 @@
     </div>
     <div class="modal-overlay" id="socialModal">
         <div class="modal-content">
-            <span class="close-button">&times;</span>
+            <span class="close-button" data-close-action="return">×</span>
             <h2>Social</h2>
             <p>Friends list, clubs, and social features.</p>
             <h4>YouTube:</h4>
@@ -410,9 +372,11 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const playButton = document.getElementById("playButton");
+            const charactersButton = document.getElementById("characters-button"); // Get the characters button
             const modalButtons = document.querySelectorAll('[data-modal-target]');
             const closeButtons = document.querySelectorAll('.close-button');
             
+            // Handle opening modals
             modalButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     const modal = document.getElementById(button.dataset.modalTarget);
@@ -422,6 +386,7 @@
                 });
             });
 
+            // Handle closing modals by returning to the main page
             closeButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     button.closest('.modal-overlay').classList.remove('active');
@@ -436,6 +401,12 @@
                 });
             });
 
+            // Handle Character button click to navigate to characters.html
+            charactersButton.addEventListener('click', () => {
+                window.location.href = "characters.html";
+            });
+
+            // Handle Play button click
             playButton.addEventListener('click', () => {
                 window.location.href = "Game.html";
             });
