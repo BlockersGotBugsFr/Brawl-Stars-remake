@@ -1,1 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Shop</title>
+    <style>
+        /* Base styles and variables */
+        :root {
+            --ui-bg-color: rgba(60, 60, 80, 0.85);
+            --ui-bg-color-solid: #3c3c50;
+            --button-color: #00BFFF;
+            --accent-color: #FFD700;
+            --shadow-dark: rgba(0, 0, 0, 0.6);
+            --ui-border-radius: 20px;
+            --font-size-base: clamp(14px, 1.5vw, 20px);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            overflow: hidden;
+            background-color: #1a1a2e;
+            font-size: var(--font-size-base);
+        }
+
+        /* Full-screen container */
+        #shop-page {
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+            background-image: url('GameLobbyBg.png'); /* Use your lobby background here */
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            overflow-y: auto;
+        }
+        
+        #shop-page::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(2px);
+            z-index: 1;
+        }
+
+        /* Back Button */
+        #back-button {
+            position: absolute;
+            top: 4vh;
+            left: 5vw;
+            width: 60px;
+            height: 60px;
+            border-radius: var(--ui-border-radius);
+            background-color: var(--ui-bg-color);
+            border: none;
+            box-shadow: 0 4px 8px var(--shadow-dark);
+            cursor: pointer;
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+        #back-button:hover {
+            transform: scale(1.05);
+            background-color: var(--ui-bg-color-solid);
+        }
+        #back-button::after {
+            content: '×'; /* Using a cross symbol for close/back */
+            font-size: 2.5em;
+            color: white;
+            text-shadow: 1px 1px 3px var(--shadow-dark);
+        }
+
+        /* Currency Display */
+        .currency-display {
+            position: absolute;
+            top: 4vh;
+            right: 5vw;
+            display: flex;
+            align-items: center;
+            background: var(--ui-bg-color);
+            border-radius: var(--ui-border-radius);
+            padding: 10px 20px;
+            box-shadow: 0 4px 8px var(--shadow-dark);
+            z-index: 5;
+        }
+        .currency-icon {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
+        .currency-amount {
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+        
+        .shop-container {
+            z-index: 2;
+            position: relative;
+            max-width: 1200px;
+            margin: 15vh auto 5vh;
+            padding: 0 20px;
+        }
+
+        .shop-container h1 {
+            text-align: center;
+            font-size: 3em;
+            color: var(--accent-color);
+            text-shadow: 2px 2px 5px var(--shadow-dark);
+            margin-bottom: 5vh;
+        }
+
+        .shop-section {
+            margin-bottom: 50px;
+        }
+
+        .shop-section h2 {
+            font-size: 2em;
+            color: white;
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 3px var(--shadow-dark);
+        }
+
+        .shop-items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .item-card {
+            background: var(--ui-bg-color);
+            border-radius: var(--ui-border-radius);
+            overflow: hidden;
+            box-shadow: 0 8px 15px var(--shadow-dark);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .item-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 25px var(--shadow-dark);
+        }
+
+        .item-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .item-info {
+            padding: 15px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .item-info h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.5em;
+        }
+
+        .item-info .item-price {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        .item-info .item-price p {
+            margin: 0;
+            font-weight: bold;
+            font-size: 1.2em;
+            color: var(--accent-color);
+            margin-left: 5px;
+        }
+        
+        .buy-button {
+            width: 80%;
+            padding: 10px;
+            background-color: var(--button-color);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .buy-button:hover {
+            background-color: #0095c9;
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="shop-page">
+        <button id="back-button"></button>
+
+        <div class="currency-display">
+            <img src="coin-icon.png" alt="Coins" class="currency-icon">
+            <p class="currency-amount">1,500</p>
+        </div>
+
+        <div class="shop-container">
+            <h1>Game Shop</h1>
+            
+            <div class="shop-section">
+                <h2>Featured</h2>
+                <div class="shop-items-grid">
+                    <div class="item-card">
+                        <img src="featured-skin.png" alt="Featured Skin" class="item-image">
+                        <div class="item-info">
+                            <h3>Galactic Voyager</h3>
+                            <div class="item-price">
+                                <img src="coin-icon.png" alt="Coins" class="currency-icon">
+                                <p>1,200</p>
+                            </div>
+                            <button class="buy-button">BUY</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="shop-section">
+                <h2>Outfits</h2>
+                <div class="shop-items-grid">
+                    <div class="item-card">
+                        <img src="outfit-1.png" alt="Outfit 1" class="item-image">
+                        <div class="item-info">
+                            <h3>Desert Commando</h3>
+                            <div class="item-price">
+                                <img src="coin-icon.png" alt="Coins" class="currency-icon">
+                                <p>800</p>
+                            </div>
+                            <button class="buy-button">BUY</button>
+                        </div>
+                    </div>
+                    <div class="item-card">
+                        <img src="outfit-2.png" alt="Outfit 2" class="item-image">
+                        <div class="item-info">
+                            <h3>Shadow Operative</h3>
+                            <div class="item-price">
+                                <img src="coin-icon.png" alt="Coins" class="currency-icon">
+                                <p>950</p>
+                            </div>
+                            <button class="buy-button">BUY</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="shop-section">
+                <h2>Weapons</h2>
+                <div class="shop-items-grid">
+                    <div class="item-card">
+                        <img src="weapon-1.png" alt="Weapon 1" class="item-image">
+                        <div class="item-info">
+                            <h3>Plasma Rifle</h3>
+                            <div class="item-price">
+                                <img src="coin-icon.png" alt="Coins" class="currency-icon">
+                                <p>1,500</p>
+                            </div>
+                            <button class="buy-button">BUY</button>
+                        </div>
+                    </div>
+                    <div class="item-card">
+                        <img src="weapon-2.png" alt="Weapon 2" class="item-image">
+                        <div class="item-info">
+                            <h3>Precision Sniper</h3>
+                            <div class="item-price">
+                                <img src="coin-icon.png" alt="Coins" class="currency-icon">
+                                <p>2,000</p>
+                            </div>
+                            <button class="buy-button">BUY</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const backButton = document.getElementById('back-button');
+
+            backButton.addEventListener('click', () => {
+                window.location.href = "index.html";
+            });
+        });
+    </script>
+</body>
+</html>
 
