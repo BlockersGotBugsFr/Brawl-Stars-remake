@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Lobby</title>
     <style>
-        /* Base styles and variables */
+
         :root {
-            --ui-bg-color: rgba(60, 60, 80, 0.7);
+            --ui-bg-color: rgba(60, 60, 80, 0.8);
             --ui-bg-color-solid: #3c3c50;
             --button-color: #00BFFF;
             --button-hover-color: #0095c9;
@@ -26,7 +26,6 @@
             font-size: var(--font-size-base);
         }
 
-        /* Full-screen container with layers */
         #lobby {
             height: 100vh;
             width: 100vw;
@@ -49,7 +48,6 @@
             z-index: 1;
         }
 
-        /* Header UI layer */
         .header-ui {
             position: absolute;
             top: 4vh;
@@ -62,7 +60,6 @@
             pointer-events: none;
         }
 
-        /* Profile and resources group */
         .profile-group {
             display: flex;
             align-items: center;
@@ -105,7 +102,6 @@
             font-weight: bold;
         }
 
-        /* Settings button */
         .settings-button {
             width: 60px;
             height: 60px;
@@ -126,7 +122,6 @@
             background-color: rgba(80, 80, 100, 0.7);
         }
 
-        /* Character display */
         .character-display {
             position: absolute;
             bottom: 0;
@@ -159,7 +154,6 @@
             100% { transform: translateY(0px); }
         }
 
-        /* Button group and Play button layers */
         .main-ui-group {
             position: absolute;
             bottom: 4vh;
@@ -172,7 +166,6 @@
             pointer-events: none;
         }
 
-        /* Bottom Nav Layer */
         .bottom-nav {
             display: flex;
             gap: 10px;
@@ -199,7 +192,6 @@
             transform: translateY(-5px);
         }
 
-        /* Play button styling */
         #playButton {
             height: 120px;
             width: 280px;
@@ -239,7 +231,6 @@
             transform: translateY(-50%);
         }
 
-        /* Shared Modal Styles */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -299,116 +290,100 @@
     <section id="lobby">
         <div class="header-ui">
             <div class="profile-group">
-                <button class="profile-button" data-modal-target="profileModal"></button>
+                <button class="profile-button" id="profile-button"></button>
                 <div class="resource-box">
                     <p>Username</p>
                 </div>
             </div>
-            <button class="settings-button" data-modal-target="settingsModal"></button>
+            <button class="settings-button" id="settings-button"></button>
         </div>
         
         <div class="character-display">
             <div class="character-model-container">
-                <img src="" alt="Character Display">
+                <img src="brawl-star-character.png" alt="Character Display">
             </div>
         </div>
 
         <div class="main-ui-group">
             <div class="bottom-nav">
-                <button data-modal-target="eventsModal">Events</button>
+                <button id="events-button">Events</button>
                 <button id="characters-button">Characters</button>
-                <button data-modal-target="shopModal">Shop</button>
-                <button data-modal-target="socialModal">Social</button>
+                <button id="shop-button">Shop</button>
+                <button id="social-button">Social</button>
             </div>
             <button id="playButton">PLAY</button>
         </div>
     </section>
 
-    <!-- Modal Popups -->
-    <div class="modal-overlay" id="profileModal">
+    <div class="modal-overlay" id="dynamicModal">
         <div class="modal-content">
-            <span class="close-button" data-close-action="return">×</span>
-            <h2>Profile</h2>
-            <p>User stats, rank, and other profile details</p>
-        </div>
-    </div>
-    <div class="modal-overlay" id="settingsModal">
-        <div class="modal-content">
-            <span class="close-button" data-close-action="return">×</span>
-            <h2>Settings</h2>
-            <p>Volume Control</p>
-            <p>Graphics Settings</p>
-            <p>Language</p>
-            <p>Account</p>
-        </div>
-    </div>
-    <div class="modal-overlay" id="eventsModal">
-        <div class="modal-content">
-            <span class="close-button" data-close-action="return">×</span>
-            <h2>Events</h2>
-            <p>special event information/updates.</p>
-        </div>
-    </div>
-    <div class="modal-overlay" id="shopModal">
-        <div class="modal-content">
-            <span class="close-button" data-close-action="return">×</span>
-            <h2>Shop</h2>
-            <p>Items and in-game purchases</p>
-            <p>(future: donation and paid items)</p>
-        </div>
-    </div>
-    <div class="modal-overlay" id="socialModal">
-        <div class="modal-content">
-            <span class="close-button" data-close-action="return">×</span>
-            <h2>Social</h2>
-            <p>Friends list, clubs, and social features.</p>
-            <h4>YouTube:</h4>
-            <p>@CiphAnonStudios</p>
-            <p>@ItsToonyTime</p>
-            <p>@DeledaoUnblocked</p>
+            <span class="close-button">&times;</span>
+            <h2 id="modal-title"></h2>
+            <div id="modal-body"></div>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const playButton = document.getElementById("playButton");
-            const charactersButton = document.getElementById("characters-button"); // Get the characters button
-            const modalButtons = document.querySelectorAll('[data-modal-target]');
-            const closeButtons = document.querySelectorAll('.close-button');
-            
-            // Handle opening modals
-            modalButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const modal = document.getElementById(button.dataset.modalTarget);
-                    if (modal) {
-                        modal.classList.add('active');
-                    }
-                });
+            const charactersButton = document.getElementById("characters-button");
+            const eventsButton = document.getElementById("events-button");
+            const shopButton = document.getElementById("shop-button");
+            const socialButton = document.getElementById("social-button");
+            const profileButton = document.getElementById("profile-button");
+            const settingsButton = document.getElementById("settings-button");
+
+            const dynamicModal = document.getElementById('dynamicModal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-body');
+            const closeButton = dynamicModal.querySelector('.close-button');
+
+            const modalContentData = {
+                profile: {
+                    title: "Profile",
+                    content: `<p>User stats, rank, and other profile details.</p>`
+                },
+                settings: {
+                    title: "Settings",
+                    content: `<p>Volume Control</p>
+                              <p>Graphics Settings</p>
+                              <p>Language</p>
+                              <p>Account</p>`
+                }
+            };
+
+            function openModal(type) {
+                const content = modalContentData[type];
+                if (content) {
+                    modalTitle.textContent = content.title;
+                    modalBody.innerHTML = content.content;
+                    dynamicModal.classList.add('active');
+                }
+            }
+
+            profileButton.addEventListener('click', () => openModal('profile'));
+            settingsButton.addEventListener('click', () => openModal('settings'));
+            closeButton.addEventListener('click', () => dynamicModal.classList.remove('active'));
+            dynamicModal.addEventListener('click', (event) => {
+                if (event.target === dynamicModal) {
+                    dynamicModal.classList.remove('active');
+                }
             });
 
-    
-            closeButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    button.closest('.modal-overlay').classList.remove('active');
-                });
-            });
-
-            document.querySelectorAll('.modal-overlay').forEach(overlay => {
-                overlay.addEventListener('click', (event) => {
-                    if (event.target === overlay) {
-                        overlay.classList.remove('active');
-                    }
-                });
-            });
-
-           
-            charactersButton.addEventListener('click', () => {
-                window.location.href = "Characters.html";
-            });
-
-           
             playButton.addEventListener('click', () => {
                 window.location.href = "Game.html";
+            });
+            charactersButton.addEventListener('click', () => {
+                window.location.href = "characters.html";
+            });
+            eventsButton.addEventListener('click', () => {
+                window.location.href = "events.html";
+            });
+            shopButton.addEventListener('click', () => {
+                window.location.href = "shop.html";
+            });
+            socialButton.addEventListener('click', () => {
+                window.location.href = "social.html";
             });
         });
     </script>
