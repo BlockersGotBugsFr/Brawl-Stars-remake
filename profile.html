@@ -1,1 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Profile</title>
+    <style>
+        /* Base styles and variables */
+        :root {
+            --ui-bg-color: rgba(60, 60, 80, 0.85);
+            --ui-bg-color-solid: #3c3c50;
+            --button-color: #00BFFF;
+            --accent-color: #FFD700;
+            --shadow-dark: rgba(0, 0, 0, 0.6);
+            --ui-border-radius: 20px;
+            --font-size-base: clamp(14px, 1.5vw, 20px);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            overflow: hidden;
+            background-color: #1a1a2e;
+            font-size: var(--font-size-base);
+        }
+
+        /* Full-screen container */
+        #profile-page {
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+            background-image: url('GameLobbyBg.png'); /* Use your lobby background here */
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            overflow-y: auto;
+        }
+        
+        #profile-page::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(2px);
+            z-index: 1;
+        }
+
+        /* Back Button */
+        #back-button {
+            position: absolute;
+            top: 4vh;
+            left: 5vw;
+            width: 60px;
+            height: 60px;
+            border-radius: var(--ui-border-radius);
+            background-color: var(--ui-bg-color);
+            border: none;
+            box-shadow: 0 4px 8px var(--shadow-dark);
+            cursor: pointer;
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+        #back-button:hover {
+            transform: scale(1.05);
+            background-color: var(--ui-bg-color-solid);
+        }
+        #back-button::after {
+            content: '×'; /* Using a cross symbol for close/back */
+            font-size: 2.5em;
+            color: white;
+            text-shadow: 1px 1px 3px var(--shadow-dark);
+        }
+        
+        .profile-container {
+            z-index: 2;
+            position: relative;
+            max-width: 1200px;
+            margin: 15vh auto 5vh;
+            padding: 0 20px;
+        }
+
+        .profile-container h1 {
+            text-align: center;
+            font-size: 3em;
+            color: var(--accent-color);
+            text-shadow: 2px 2px 5px var(--shadow-dark);
+            margin-bottom: 5vh;
+        }
+
+        .profile-summary-card {
+            display: flex;
+            align-items: center;
+            background: var(--ui-bg-color);
+            border-radius: var(--ui-border-radius);
+            box-shadow: 0 8px 15px var(--shadow-dark);
+            padding: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .profile-summary-card img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid var(--accent-color);
+            margin-right: 30px;
+        }
+        
+        .profile-summary-info h2 {
+            margin: 0;
+            font-size: 2.5em;
+            text-shadow: 1px 1px 3px var(--shadow-dark);
+        }
+        
+        .profile-summary-info p {
+            margin: 5px 0 0;
+            font-size: 1.2em;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .profile-stats-section {
+            margin-bottom: 50px;
+        }
+
+        .profile-stats-section h2 {
+            font-size: 2em;
+            color: white;
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 3px var(--shadow-dark);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .stat-card {
+            background: var(--ui-bg-color);
+            border-radius: var(--ui-border-radius);
+            box-shadow: 0 4px 8px var(--shadow-dark);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            margin: 0;
+            font-size: 1.2em;
+            color: var(--accent-color);
+        }
+
+        .stat-card p {
+            margin: 5px 0 0;
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .achievements-section h2 {
+            font-size: 2em;
+            color: white;
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 3px var(--shadow-dark);
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+        
+        .achievement-card {
+            background: var(--ui-bg-color);
+            border-radius: var(--ui-border-radius);
+            box-shadow: 0 4px 8px var(--shadow-dark);
+            padding: 15px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 150px;
+        }
+        
+        .achievement-card img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 10px;
+        }
+        
+        .achievement-card h4 {
+            margin: 0;
+            font-size: 1em;
+            color: var(--accent-color);
+        }
+        
+        .achievement-card p {
+            margin: 5px 0 0;
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div id="profile-page">
+        <button id="back-button"></button>
+
+        <div class="profile-container">
+            <h1>Player Profile</h1>
+            
+            <div class="profile-summary-card">
+                <img src="profile-icon.png" alt="Profile Picture">
+                <div class="profile-summary-info">
+                    <h2>Username</h2>
+                    <p>Level 25</p>
+                    <p>Status: Online</p>
+                </div>
+            </div>
+
+            <div class="profile-stats-section">
+                <h2>Game Stats</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Wins</h3>
+                        <p>123</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Kills</h3>
+                        <p>4567</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>K/D Ratio</h3>
+                        <p>2.5</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Matches Played</h3>
+                        <p>987</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="achievements-section">
+                <h2>Achievements</h2>
+                <div class="achievements-grid">
+                    <div class="achievement-card">
+                        <img src="achievement-icon-1.png" alt="First Victory">
+                        <h4>First Victory</h4>
+                        <p>Won your first match</p>
+                    </div>
+                    <div class="achievement-card">
+                        <img src="achievement-icon-2.png" alt="Sharpshooter">
+                        <h4>Sharpshooter</h4>
+                        <p>Achieved 100 headshots</p>
+                    </div>
+                    <div class="achievement-card">
+                        <img src="achievement-icon-3.png" alt="Apex Predator">
+                        <h4>Apex Predator</h4>
+                        <p>Won 5 matches in a row</p>
+                    </div>
+                    <div class="achievement-card">
+                        <img src="achievement-icon-4.png" alt="Team Player">
+                        <h4>Team Player</h4>
+                        <p>Revived teammates 50 times</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const backButton = document.getElementById('back-button');
+
+            backButton.addEventListener('click', () => {
+                window.location.href = "index.html";
+            });
+        });
+    </script>
+</body>
+</html>
 
