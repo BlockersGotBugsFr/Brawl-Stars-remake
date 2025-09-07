@@ -30,7 +30,7 @@
             height: 100vh;
             width: 100vw;
             position: relative;
-            background: black;
+            background-image: url('GameLobbyBg.png');
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
@@ -49,11 +49,21 @@
             z-index: 1;
         }
 
-        /* Back Button */
-        #back-button {
-            position: absolute;
+        /* Header UI (Back Button and Title) */
+        .page-header {
+            position: fixed;
             top: 4vh;
             left: 5vw;
+            right: 5vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 5;
+            pointer-events: none;
+        }
+        #back-button {
+            position: absolute;
+            left: 0;
             width: 60px;
             height: 60px;
             border-radius: var(--ui-border-radius);
@@ -61,7 +71,7 @@
             border: none;
             box-shadow: 0 4px 8px var(--shadow-dark);
             cursor: pointer;
-            z-index: 5;
+            pointer-events: auto;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -72,33 +82,79 @@
             background-color: var(--ui-bg-color-solid);
         }
         #back-button::after {
-            content: '×'; /* Using a cross symbol for close/back */
+            content: '×';
             font-size: 2.5em;
             color: white;
             text-shadow: 1px 1px 3px var(--shadow-dark);
         }
-        
-        .events-container {
-            z-index: 2;
-            position: relative;
-            max-width: 1200px;
-            margin: 15vh auto 5vh;
-            padding: 0 20px;
-        }
-
-        .events-container h1 {
-            text-align: center;
+        .page-title {
             font-size: 3em;
             color: var(--accent-color);
             text-shadow: 2px 2px 5px var(--shadow-dark);
-            margin-bottom: 5vh;
+            text-align: center;
         }
 
-        .event-section {
-            margin-bottom: 50px;
+        /* Main Content Area */
+        .events-container {
+            z-index: 2;
+            position: relative;
+            padding: 15vh 0 5vh;
         }
 
-        .event-section h2 {
+        /* Hero Event Section */
+        .hero-event {
+            max-width: 80%;
+            margin: 0 auto 5vh;
+            background: var(--ui-bg-color);
+            border-radius: var(--ui-border-radius);
+            box-shadow: 0 8px 20px var(--shadow-dark);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .hero-image {
+            width: 100%;
+            height: 400px;
+            background-size: cover;
+            background-position: center;
+        }
+        .hero-content {
+            padding: 30px;
+            text-align: center;
+        }
+        .hero-content h2 {
+            font-size: 2.5em;
+            color: var(--accent-color);
+            margin: 0 0 10px;
+        }
+        .hero-content p {
+            font-size: 1.2em;
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0 0 20px;
+        }
+        .hero-button {
+            padding: 15px 40px;
+            background-color: var(--button-color);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        .hero-button:hover {
+            background-color: #0095c9;
+            transform: translateY(-3px);
+        }
+
+        /* Scrolling Event Sections */
+        .events-scroll-section {
+            margin: 50px 0;
+            padding: 0 5vw;
+        }
+        .events-scroll-section h2 {
             font-size: 2em;
             color: white;
             border-bottom: 3px solid var(--accent-color);
@@ -106,128 +162,90 @@
             margin-bottom: 20px;
             text-shadow: 1px 1px 3px var(--shadow-dark);
         }
-
-        .event-cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+        .scroll-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 25px;
+            padding-bottom: 20px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
         }
-        
-        .event-card {
+        .scroll-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .scroll-container::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+        .scroll-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .event-card-scroll {
+            min-width: 300px;
+            max-width: 300px;
             background: var(--ui-bg-color);
             border-radius: var(--ui-border-radius);
-            overflow: hidden;
             box-shadow: 0 8px 15px var(--shadow-dark);
+            overflow: hidden;
+            flex-shrink: 0;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
         }
-
-        .event-card:hover {
+        .event-card-scroll:hover {
             transform: translateY(-10px);
             box-shadow: 0 12px 25px var(--shadow-dark);
         }
-
-        .event-card-header {
-            height: 150px;
+        .event-card-scroll-image {
+            width: 100%;
+            height: 180px;
             background-size: cover;
             background-position: center;
-            position: relative;
-            display: flex;
-            align-items: flex-end;
+        }
+        .event-card-scroll-content {
             padding: 15px;
         }
-
-        .event-card-header h3 {
-            margin: 0;
-            font-size: 1.5em;
-            text-shadow: 1px 1px 3px var(--shadow-dark);
+        .event-card-scroll-content h3 {
+            margin: 0 0 5px;
+            font-size: 1.3em;
         }
-
-        .event-card-body {
-            padding: 20px;
-        }
-
-        .event-card-body p {
+        .event-card-scroll-content p {
             margin: 0;
-            font-size: 1em;
+            font-size: 0.9em;
             color: rgba(255, 255, 255, 0.8);
         }
-
-        .event-card-body .event-date {
-            margin-top: 10px;
-            font-weight: bold;
-            color: var(--accent-color);
-        }
-        
     </style>
 </head>
 <body>
     <div id="events-page">
-        <button id="back-button"></button>
+        <div class="page-header">
+            <button id="back-button"></button>
+            <h1 class="page-title">Game Events</h1>
+        </div>
 
         <div class="events-container">
-            <h1>Game Events</h1>
+            <!-- Hero Event -->
+            <div class="hero-event">
+                <div class="hero-image" style="background-image: url('featured-event-hero.png');"></div>
+                <div class="hero-content">
+                    <h2>Season 1: Grand Opening</h2>
+                    <p>Dive into the all-new map with fresh mechanics and exclusive rewards.</p>
+                    <button class="hero-button">JOIN NOW</button>
+                </div>
+            </div>
             
-            <div class="event-section">
-                <h2>Featured</h2>
-                <div class="event-cards-grid">
-                    <div class="event-card">
-                        <div class="event-card-header" style="background-image: url('featured-event-1.png');">
-                            <h3>Season 1: Grand Opening</h3>
-                        </div>
-                        <div class="event-card-body">
-                            <p>Dive into the all-new map with fresh mechanics and exclusive rewards.</p>
-                            <p class="event-date">Ends: Oct 31, 2025</p>
-                        </div>
-                    </div>
-                    <div class="event-card">
-                        <div class="event-card-header" style="background-image: url('featured-event-2.png');">
-                            <h3>Double XP Weekend</h3>
-                        </div>
-                        <div class="event-card-body">
-                            <p>Level up faster than ever and show off your progression.</p>
-                            <p class="event-date">September 27-29, 2025</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="event-section">
+            <!-- Upcoming Events (Horizontal Scroll) -->
+            <div class="events-scroll-section">
                 <h2>Upcoming</h2>
-                <div class="event-cards-grid">
-                    <div class="event-card">
-                        <div class="event-card-header" style="background-image: url('upcoming-event-1.png');">
-                            <h3>Haunted Harvest</h3>
-                        </div>
-                        <div class="event-card-body">
-                            <p>A spooky new event with limited-time characters and gear.</p>
-                            <p class="event-date">Starts: October 1, 2025</p>
-                        </div>
-                    </div>
-                    <div class="event-card">
-                        <div class="event-card-header" style="background-image: url('upcoming-event-2.png');">
-                            <h3>Winter Wonderland</h3>
-                        </div>
-                        <div class="event-card-body">
-                            <p>Get into the holiday spirit with festive outfits and challenges.</p>
-                            <p class="event-date">Starts: December 1, 2025</p>
-                        </div>
-                    </div>
+                <div class="scroll-container" id="upcoming-events-container">
+                    <!-- Upcoming event cards will be dynamically inserted here -->
                 </div>
             </div>
 
-            <div class="event-section">
-                <h2>Limited-Time</h2>
-                <div class="event-cards-grid">
-                    <div class="event-card">
-                        <div class="event-card-header" style="background-image: url('limited-event-1.png');">
-                            <h3>Last Chance: Golden Skin</h3>
-                        </div>
-                        <div class="event-card-body">
-                            <p>Don't miss your final opportunity to earn the exclusive Golden Rogue skin.</p>
-                            <p class="event-date">Ends: Today!</p>
-                        </div>
-                    </div>
+            <!-- Past Events (Horizontal Scroll) -->
+            <div class="events-scroll-section">
+                <h2>Past Events</h2>
+                <div class="scroll-container" id="past-events-container">
+                    <!-- Past event cards will be dynamically inserted here -->
                 </div>
             </div>
         </div>
@@ -236,6 +254,67 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const backButton = document.getElementById('back-button');
+            
+            const upcomingEvents = [
+                {
+                    title: "Haunted Harvest",
+                    image: "upcoming-event-1.png",
+                    description: "A spooky new event with limited-time characters and gear.",
+                },
+                {
+                    title: "Winter Wonderland",
+                    image: "upcoming-event-2.png",
+                    description: "Get into the holiday spirit with festive outfits and challenges.",
+                },
+                {
+                    title: "Lunar Festival",
+                    image: "upcoming-event-3.png",
+                    description: "Celebrate the new year with special maps and fireworks.",
+                },
+            ];
+
+            const pastEvents = [
+                {
+                    title: "Double XP Weekend",
+                    image: "past-event-1.png",
+                    description: "Level up faster than ever and show off your progression.",
+                },
+                {
+                    title: "Golden Skin Giveaway",
+                    image: "past-event-2.png",
+                    description: "A last chance to grab the exclusive Golden Rogue skin.",
+                },
+                {
+                    title: "Summer Slam",
+                    image: "past-event-3.png",
+                    description: "Bask in the sun with seasonal quests and rewards.",
+                },
+            ];
+
+            const upcomingContainer = document.getElementById('upcoming-events-container');
+            const pastContainer = document.getElementById('past-events-container');
+
+            function createEventCard(eventData) {
+                const card = document.createElement('div');
+                card.classList.add('event-card-scroll');
+                card.innerHTML = `
+                    <div class="event-card-scroll-image" style="background-image: url('${eventData.image}');"></div>
+                    <div class="event-card-scroll-content">
+                        <h3>${eventData.title}</h3>
+                        <p>${eventData.description}</p>
+                    </div>
+                `;
+                return card;
+            }
+
+            upcomingEvents.forEach(event => {
+                upcomingContainer.appendChild(createEventCard(event));
+            });
+
+            pastEvents.forEach(event => {
+                pastContainer.appendChild(createEventCard(event));
+            });
+
 
             backButton.addEventListener('click', () => {
                 window.location.href = "lobby.html";
